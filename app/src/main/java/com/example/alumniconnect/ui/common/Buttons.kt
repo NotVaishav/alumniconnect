@@ -61,8 +61,7 @@ fun PrimaryButton(
             contentColor = Color.Black,
         ),
         modifier = modifier
-            .fillMaxWidth()
-            .padding(start = 20.dp, top = 10.dp, end = 20.dp, bottom = 10.dp),
+            .fillMaxWidth(),
         shape = RoundedCornerShape(10.dp)
     ) {
         Row(
@@ -111,7 +110,6 @@ fun LoadingButton(
         shape = RoundedCornerShape(10.dp),
         modifier = modifier.fillMaxSize()
     ) {
-
         Crossfade(
             targetState = isLoading,
             label = "",
