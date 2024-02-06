@@ -3,8 +3,8 @@
     <string name="welcome_desc">Join a vibrant community of alumni and students.</string>
     <string name="btn_get_started">Get Started</string>
     <string name="txt_btn_already_account">Already have an account?</string>
-    <string name="student">Student</string>
-    <string name="alumni">Alumni</string>
-    <string name="are_you">You are a?</string>
+    <string name="student">I\'m a student</string>
+    <string name="alumni">I\'m an alumnus</string>
+    <string name="are_you">Choose what best suites you.</string>
     <string name="get_started">Let\'s get started!</string>
 </resources>

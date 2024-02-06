@@ -4,19 +4,27 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import com.example.alumniconnect.ui.screens.login.LoginScreen
 import com.example.alumniconnect.ui.screens.signup.SignupScreen
+import com.example.alumniconnect.ui.screens.signup.SignupUiState
+import com.example.alumniconnect.ui.screens.signup.SignupViewModel
+import com.example.alumniconnect.ui.screens.signup.signupGraph
 import com.example.alumniconnect.ui.screens.welcome.WelcomeScreen
 
-enum class AlumniConnectNavDestinations(val title: String) {
-    Welcome(title = "welcome"),
-    Signup(title = "signup"),
-    Login(title = "login")
+enum class AlumniConnectNavDestinations(val title: String, val route: String) {
+    Welcome(title = "welcome", route = "welcomeRoute"),
+    Signup(title = "signup", route = "signupRoute"),
+    Login(title = "login", route = "loginRoute"),
+    Student(title = "student", route = "studentRoute"),
+    Alumnus(title = "alumnus", route = "alumnusRoute"),
+    Credentials(title = "credentials", route = "credentialsRoute"),
 }
 
 @Composable
 fun AlumniConnectNavGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    signupViewModel: SignupViewModel,
 ) {
     NavHost(
         navController = navController,
@@ -27,9 +35,7 @@ fun AlumniConnectNavGraph(
                 onStartBtnClick = { navController.navigate(AlumniConnectNavDestinations.Signup.title) },
                 onAccountBtnClick = { navController.navigate(AlumniConnectNavDestinations.Login.title) })
         }
-        composable(route = AlumniConnectNavDestinations.Signup.title) {
-            SignupScreen()
-        }
+        signupGraph(navController = navController, signupViewModel)
         composable(route = AlumniConnectNavDestinations.Login.title) {
             LoginScreen()
         }

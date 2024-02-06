@@ -1,4 +1,4 @@
-package com.example.alumniconnect.ui.common.buttons
+package com.example.alumniconnect.ui.common
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
