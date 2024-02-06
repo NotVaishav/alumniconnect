@@ -50,7 +50,9 @@ import com.example.alumniconnect.R
 @Composable
 fun WelcomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: WelcomeViewModel = viewModel()
+    viewModel: WelcomeViewModel = viewModel(),
+    onStartBtnClick: () -> Unit,
+    onAccountBtnClick: (Int) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -101,7 +103,7 @@ fun WelcomeScreen(
             )
         }
         Button(
-            onClick = { /*TODO*/ },
+            onClick = onStartBtnClick,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFf0f0f0),
                 contentColor = Color.Black
@@ -113,9 +115,11 @@ fun WelcomeScreen(
         ) {
             Text(text = context.getString(R.string.btn_get_started))
         }
-        ClickableText(text = AnnotatedString(context.getString(R.string.txt_btn_already_account)),
+        ClickableText(
+            text = AnnotatedString(context.getString(R.string.txt_btn_already_account)),
             style = MaterialTheme.typography.bodySmall.merge(TextStyle(textDecoration = TextDecoration.Underline)),
-            onClick = { Log.d("ACCBTN", "Pressed") })
+            onClick = onAccountBtnClick
+        )
     }
 }
 
@@ -123,6 +127,6 @@ fun WelcomeScreen(
 @Composable
 fun WelcomePreview() {
     AlumniConnectTheme {
-        WelcomeScreen()
+        WelcomeScreen(onStartBtnClick = {}, onAccountBtnClick = {})
     }
 }
