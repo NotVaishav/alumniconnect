@@ -41,7 +41,7 @@ fun NavGraphBuilder.signupGraph(
                 },
                 viewModel = signupViewModel,
                 onDoneBtn = { signupViewModel.onDone(navController) },
-                onFrontBtnClick = { signupViewModel.onDone(navController) })
+                onFrontBtnClick = { signupViewModel.onDone(navController, viaNextBtn = true) })
         }
         composable(route = AlumniConnectNavDestinations.Credentials.title) {
             CredentialsScreen(

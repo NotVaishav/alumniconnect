@@ -10,4 +10,5 @@
     <color name="primary_grey">#FFF0F0F0</color>
     <color name="text_grey">#FF3F484A</color>
     <color name="outline_grey">#FF6F797A</color>
+    <color name="btn_text_grey">#FF121515</color>
 </resources>

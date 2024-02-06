@@ -1,6 +1,7 @@
 package com.example.alumniconnect.ui.screens.signup
 
 import android.widget.Space
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,7 +24,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,12 +47,18 @@ fun StudentSignupScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
+    val localFocusManager = LocalFocusManager.current
     Column(
         modifier = modifier
             .padding(20.dp)
             .fillMaxSize()
             .verticalScroll(scrollState)
             .imePadding()
+            .pointerInput(Unit) {
+                detectTapGestures(onTap = {
+                    localFocusManager.clearFocus()
+                })
+            }
     ) {
         WelcomeTopBar(
             onBackBtnClick = onBackBtnClick,
@@ -68,7 +77,6 @@ fun StudentSignupScreen(
             text = "Let's get to know you",
             style = MaterialTheme.typography.labelLarge,
             color = Color(R.color.text_grey),
-            modifier = modifier.padding()
         )
         Spacer(modifier = modifier.size(20.dp))
         PrimaryOutlinedTextField(
