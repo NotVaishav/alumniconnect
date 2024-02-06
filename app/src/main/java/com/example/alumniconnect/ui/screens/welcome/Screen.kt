@@ -45,6 +45,7 @@ import androidx.navigation.NavBackStackEntry
 import com.example.alumniconnect.ui.theme.AlumniConnectTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.alumniconnect.R
+import com.example.alumniconnect.ui.common.buttons.PrimaryButton
 
 
 @Composable
@@ -102,19 +103,10 @@ fun WelcomeScreen(
                 modifier = modifier.fillMaxSize()
             )
         }
-        Button(
-            onClick = onStartBtnClick,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFf0f0f0),
-                contentColor = Color.Black
-            ),
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(start = 20.dp, top = 20.dp, end = 20.dp, bottom = 10.dp),
-            shape = RoundedCornerShape(10.dp)
-        ) {
-            Text(text = context.getString(R.string.btn_get_started))
-        }
+        PrimaryButton(
+            onBtnClick = onStartBtnClick,
+            btnText = R.string.btn_get_started
+        )
         ClickableText(
             text = AnnotatedString(context.getString(R.string.txt_btn_already_account)),
             style = MaterialTheme.typography.bodySmall.merge(TextStyle(textDecoration = TextDecoration.Underline)),
