@@ -51,16 +51,20 @@ fun SignupScreen(
             color = Color(R.color.text_grey),
             modifier = modifier.padding(start = 20.dp)
         )
-        PrimaryButton(
-            onBtnClick = onStudentBtnClick,
-            btnText = R.string.student,
-            icon = R.drawable.next
-        )
-        PrimaryButton(
-            onBtnClick = onAlumnusBtnClick,
-            btnText = R.string.alumni,
-            icon = R.drawable.next
-        )
+        Column(modifier.padding(horizontal = 20.dp, vertical = 10.dp)) {
+            PrimaryButton(
+                onBtnClick = onStudentBtnClick,
+                btnText = R.string.student,
+                icon = R.drawable.next,
+                )
+            Spacer(modifier = modifier.size(10.dp))
+            PrimaryButton(
+                onBtnClick = onAlumnusBtnClick,
+                btnText = R.string.alumni,
+                icon = R.drawable.next
+            )
+        }
+
     }
 }
 

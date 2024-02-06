@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.alumniconnect.R
 import com.example.alumniconnect.ui.common.LoadingButton
+import com.example.alumniconnect.ui.common.PrimaryButton
 import com.example.alumniconnect.ui.common.PrimaryOutlinedTextField
 import com.example.alumniconnect.ui.common.WelcomeTopBar
 import com.example.alumniconnect.ui.theme.AlumniConnectTheme
@@ -86,11 +87,7 @@ fun CredentialsScreen(
             isPassword = true
         )
         Spacer(modifier = modifier.size(10.dp))
-        LoadingButton(
-            onBtnClick = {},
-            btnText = R.string.begin,
-            isLoading = !uiState.areCredentialsValid,
-        )
+        PrimaryButton(onBtnClick = { /*TODO*/ }, btnText = R.string.begin)
     }
 }
 

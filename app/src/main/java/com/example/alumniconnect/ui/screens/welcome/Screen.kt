@@ -49,7 +49,7 @@ fun WelcomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .background(color = Color(context.getColor(R.color.white)))
+            .background(color = Color(context.getColor(R.color.white))).padding(20.dp)
     ) {
         Spacer(modifier = modifier.height(100.dp))
         Divider(
