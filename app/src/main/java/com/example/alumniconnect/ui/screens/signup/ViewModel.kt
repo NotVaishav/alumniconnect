@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.alumniconnect.data.User
+import com.example.alumniconnect.data.UsersRepository
 import com.example.alumniconnect.ui.navigation.AlumniConnectNavDestinations
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class SignupViewModel : ViewModel() {
+class SignupViewModel(private val usersRepository: UsersRepository) : ViewModel() {
     private val _uiState = MutableStateFlow(SignupUiState())
     val uiState: StateFlow<SignupUiState> = _uiState.asStateFlow()
 
@@ -77,6 +79,24 @@ class SignupViewModel : ViewModel() {
         }
     }
 
+    suspend fun saveUser() {
+        _uiState.update { currentState -> currentState.copy(error = "") }
+        val result = usersRepository.insertUser(
+            User(
+                id = uiState.value.id,
+                emailId = uiState.value.emailId,
+                password = uiState.value.password
+            )
+        )
+        result.onSuccess {
+            _uiState.update { currentState -> currentState.copy(error = "success") }
+        }.onFailure { e ->
+            _uiState.update { currentState -> currentState.copy(error = "$e") }
+            Log.d("SQLLITE", "$e")
+        }
+
+    }
+
     fun validateCredentials() {
         viewModelScope.launch {
             delay(3000)
@@ -86,6 +106,7 @@ class SignupViewModel : ViewModel() {
 }
 
 data class SignupUiState(
+    val id: Int = 0,
     var isStudent: Boolean = true,
     var firstName: String = "Vaishav",
     var lastName: String = "Dhepe",
@@ -96,5 +117,6 @@ data class SignupUiState(
     var graduationYear: Int? = null,
     var coopYear: Int? = null,
     var isFormValid: Boolean = true,
-    var areCredentialsValid: Boolean = false
+    var areCredentialsValid: Boolean = false,
+    var error: String = ""
 )

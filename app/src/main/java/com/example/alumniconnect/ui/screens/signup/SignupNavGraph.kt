@@ -1,11 +1,13 @@
 package com.example.alumniconnect.ui.screens.signup
 
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.example.alumniconnect.ui.AppViewModelProvider
 import com.example.alumniconnect.ui.navigation.AlumniConnectNavDestinations
 
 
@@ -39,7 +41,6 @@ fun NavGraphBuilder.signupGraph(
                     )
 
                 },
-                viewModel = signupViewModel,
                 onDoneBtn = { signupViewModel.onDone(navController) },
                 onFrontBtnClick = { signupViewModel.onDone(navController, viaNextBtn = true) })
         }
@@ -48,7 +49,6 @@ fun NavGraphBuilder.signupGraph(
                 onBackBtnClick = {
                     navController.popBackStack()
                 },
-                viewModel = signupViewModel,
             )
         }
     }

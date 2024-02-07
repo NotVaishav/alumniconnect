@@ -1,10 +1,12 @@
 package com.example.alumniconnect.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.example.alumniconnect.ui.AppViewModelProvider
 import com.example.alumniconnect.ui.screens.login.LoginScreen
 import com.example.alumniconnect.ui.screens.signup.SignupScreen
 import com.example.alumniconnect.ui.screens.signup.SignupUiState
@@ -24,7 +26,7 @@ enum class AlumniConnectNavDestinations(val title: String, val route: String) {
 @Composable
 fun AlumniConnectNavGraph(
     navController: NavHostController,
-    signupViewModel: SignupViewModel,
+    signupViewModel: SignupViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     NavHost(
         navController = navController,
