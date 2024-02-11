@@ -31,7 +31,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.alumniconnect.AlumniConnectApplication
 import com.example.alumniconnect.R
+import com.example.alumniconnect.data.OfflineUsersRepository
+import com.example.alumniconnect.data.UserDao
+import com.example.alumniconnect.data.UsersRepository
+import com.example.alumniconnect.ui.AppViewModelProvider
 import com.example.alumniconnect.ui.common.PrimaryOutlinedTextField
 import com.example.alumniconnect.ui.common.WelcomeTopBar
 import com.example.alumniconnect.ui.theme.AlumniConnectTheme
@@ -41,7 +47,7 @@ import kotlinx.coroutines.launch
 fun StudentSignupScreen(
     modifier: Modifier = Modifier,
     onBackBtnClick: () -> Unit,
-    viewModel: SignupViewModel,
+    viewModel: SignupViewModel = viewModel(factory = AppViewModelProvider.Factory),
     onDoneBtn: () -> Unit,
     onFrontBtnClick: () -> Unit
 ) {
@@ -107,7 +113,6 @@ fun StudentSignupPreview() {
     AlumniConnectTheme {
         StudentSignupScreen(
             onBackBtnClick = {},
-            viewModel = SignupViewModel(),
             onDoneBtn = {},
             onFrontBtnClick = {}
         )

@@ -1,13 +1,11 @@
-package com.example.alumniconnect.ui
+package com.example.alumniconnect
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.alumniconnect.ui.navigation.AlumniConnectNavGraph
-import com.example.alumniconnect.ui.screens.signup.SignupUiState
 import com.example.alumniconnect.ui.screens.signup.SignupViewModel
-import com.example.alumniconnect.ui.screens.welcome.WelcomeScreen
 import com.example.alumniconnect.ui.theme.AlumniConnectTheme
 
 
@@ -15,8 +13,8 @@ import com.example.alumniconnect.ui.theme.AlumniConnectTheme
 fun AlumniConnectApp(navController: NavHostController = rememberNavController()) {
     AlumniConnectNavGraph(
         navController = navController,
-        signupViewModel = SignupViewModel(),
     )
+
 }
 
 
