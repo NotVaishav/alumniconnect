@@ -14,6 +14,7 @@ fun AlumniConnectApp(navController: NavHostController = rememberNavController())
     AlumniConnectNavGraph(
         navController = navController,
     )
+
 }
 
 

@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.alumniconnect.ui.AppViewModelProvider
+import com.example.alumniconnect.ui.screens.home.homeGraph
 import com.example.alumniconnect.ui.screens.login.LoginScreen
 import com.example.alumniconnect.ui.screens.signup.SignupScreen
 import com.example.alumniconnect.ui.screens.signup.SignupUiState
@@ -21,6 +22,9 @@ enum class AlumniConnectNavDestinations(val title: String, val route: String) {
     Student(title = "student", route = "studentRoute"),
     Alumnus(title = "alumnus", route = "alumnusRoute"),
     Credentials(title = "credentials", route = "credentialsRoute"),
+    Home(title = "home", route = "homeRoute"),
+    Alumni(title = "alumni", route = "alumniRoute"),
+    Profile(title = "profile", route = "profileRoute"),
 }
 
 @Composable
@@ -30,7 +34,7 @@ fun AlumniConnectNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = AlumniConnectNavDestinations.Welcome.title
+        startDestination = AlumniConnectNavDestinations.Home.title
     ) {
         composable(route = AlumniConnectNavDestinations.Welcome.title) {
             WelcomeScreen(
@@ -41,5 +45,6 @@ fun AlumniConnectNavGraph(
         composable(route = AlumniConnectNavDestinations.Login.title) {
             LoginScreen()
         }
+        homeGraph(navController = navController)
     }
 }
