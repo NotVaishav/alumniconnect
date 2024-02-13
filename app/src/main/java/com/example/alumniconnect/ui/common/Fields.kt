@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -54,10 +55,11 @@ fun PrimaryOutlinedTextField(
             value = value,
             onValueChange = onValueChange,
             placeholder = { Text(text = labelText) },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
+            colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color(R.color.text_grey),
                 unfocusedBorderColor = Color(R.color.outline_grey),
-                placeholderColor = Color(R.color.outline_grey)
+                focusedPlaceholderColor = Color(R.color.outline_grey),
+                unfocusedPlaceholderColor = Color(R.color.outline_grey),
             ),
             shape = RoundedCornerShape(10.dp),
             modifier = modifier

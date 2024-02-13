@@ -1,6 +1,7 @@
 package com.example.alumniconnect.ui.screens.home
 
 import android.graphics.drawable.Icon
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -43,15 +44,22 @@ import com.example.alumniconnect.ui.navigation.AlumniConnectNavDestinations
 import com.example.alumniconnect.ui.theme.AlumniConnectTheme
 
 
-sealed class Screen(val route: String, val resourceId: String, val icon: ImageVector) {
+sealed class Screen(val route: String, val routeList: Array<String>, val icon: ImageVector) {
     data object Alumnus : Screen(
         AlumniConnectNavDestinations.Alumni.title,
-        "Alumnus",
+        arrayOf(
+            AlumniConnectNavDestinations.Alumni.title,
+            AlumniConnectNavDestinations.AlumniDirectory.title
+        ),
         Icons.Filled.Person
     )
 
     data object Profile :
-        Screen(AlumniConnectNavDestinations.Profile.title, "Profile", Icons.Filled.AccountCircle)
+        Screen(
+            AlumniConnectNavDestinations.Profile.title,
+            arrayOf(AlumniConnectNavDestinations.Profile.title),
+            Icons.Filled.AccountCircle
+        )
 }
 
 val items = listOf(
@@ -64,7 +72,8 @@ fun BottomNavBar(modifier: Modifier = Modifier, navController: NavController) {
     NavigationBar(
         containerColor = Color(0xFFF5F5F5),
         modifier = modifier
-            .height(78.dp).fillMaxSize()
+            .height(78.dp)
+            .fillMaxSize()
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -77,7 +86,7 @@ fun BottomNavBar(modifier: Modifier = Modifier, navController: NavController) {
             items.forEach { item ->
                 NavigationBarItem(
 
-                    selected = currentRoute == item.route,
+                    selected = currentRoute in item.routeList,
                     onClick = {
                         navController.navigate(item.route) {
                             popUpTo(navController.graph.startDestinationId)
@@ -85,7 +94,8 @@ fun BottomNavBar(modifier: Modifier = Modifier, navController: NavController) {
                         }
                     },
                     icon = {
-                        if (currentRoute == item.route) {
+                        Log.d("ROUTE", AlumniConnectNavDestinations.AlumniDirectory.title)
+                        if (currentRoute in item.routeList) {
                             Icon(item.icon, contentDescription = null, tint = Color.Black)
                         } else {
                             Icon(item.icon, contentDescription = null, tint = primaryGreyColor)
@@ -96,11 +106,10 @@ fun BottomNavBar(modifier: Modifier = Modifier, navController: NavController) {
                         .colors(
                             selectedIconColor = Color.Blue,
                             indicatorColor = Color(0xFFF5F5F5),
-
                             ),
 
                     modifier = modifier.wrapContentSize()
-                    )
+                )
             }
         }
     }
