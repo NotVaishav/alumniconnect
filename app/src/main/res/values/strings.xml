@@ -8,4 +8,6 @@
     <string name="are_you">Choose what best suites you.</string>
     <string name="get_started">Let\'s get started!</string>
     <string name="begin">Let\'s begin</string>
+    <string name="view_resume">View Resume</string>
+    <string name="view_cl">View CL</string>
 </resources>

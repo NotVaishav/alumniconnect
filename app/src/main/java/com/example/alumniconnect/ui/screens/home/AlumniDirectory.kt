@@ -2,6 +2,7 @@ package com.example.alumniconnect.ui.screens.home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -74,7 +75,7 @@ fun AlumniDirectoryScreen(
         ) {
             AppSearchBar(domainId = domainId)
             Spacer(modifier = modifier.size(10.dp))
-            AlumniList()
+            AlumniList(navController = navController)
         }
     }
 }
@@ -108,19 +109,18 @@ fun AppSearchBar(modifier: Modifier = Modifier, domainId: String) {
             ),
             containerColor = Color(0xFFF5F5F5)
         ),
-        modifier = modifier.padding(top=0.dp),
+        modifier = modifier.padding(top = 0.dp),
         windowInsets = WindowInsets(
             top = 0.dp,
             bottom = 0.dp
         ),
-
-        ) {
+    ) {
     }
 }
 
 
 @Composable
-fun AlumniList(modifier: Modifier = Modifier) {
+fun AlumniList(modifier: Modifier = Modifier, navController: NavController) {
     var alumniList = listOf<AlumniProfile>(
         AlumniProfile(
             R.drawable.profile_pic,
@@ -175,7 +175,9 @@ fun AlumniList(modifier: Modifier = Modifier) {
     )
     LazyColumn() {
         itemsIndexed(alumniList) { index, item ->
-            AlumniTile(alumniProfile = item)
+            AlumniTile(
+                alumniProfile = item,
+                onProfileClick = { navController.navigate("${AlumniConnectNavDestinations.AlumniProfile.route}/1") })
         }
     }
 }
@@ -183,13 +185,18 @@ fun AlumniList(modifier: Modifier = Modifier) {
 data class AlumniProfile(val profilePic: Int, val name: String, val profession: String)
 
 @Composable
-fun AlumniTile(modifier: Modifier = Modifier, alumniProfile: AlumniProfile) {
+fun AlumniTile(
+    modifier: Modifier = Modifier,
+    alumniProfile: AlumniProfile,
+    onProfileClick: () -> Unit = {}
+) {
     var fontGrey = colorResource(id = R.color.secondary_grey)
 
     Row(
         modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 10.dp, vertical = 10.dp)
+            .clickable { onProfileClick() }
     ) {
         Image(
             painter = painterResource(id = alumniProfile.profilePic),

@@ -49,7 +49,8 @@ sealed class Screen(val route: String, val routeList: Array<String>, val icon: I
         AlumniConnectNavDestinations.Alumni.title,
         arrayOf(
             AlumniConnectNavDestinations.Alumni.title,
-            AlumniConnectNavDestinations.AlumniDirectory.title
+            AlumniConnectNavDestinations.AlumniDirectory.title,
+            AlumniConnectNavDestinations.AlumniProfile.title
         ),
         Icons.Filled.Person
     )

@@ -52,12 +52,13 @@ fun PrimaryButton(
     onBtnClick: () -> Unit,
     @StringRes btnText: Int,
     @DrawableRes icon: Int? = null,
+    btnColor: Color = Color(0xFFf0f0f0)
 ) {
     val context = LocalContext.current
     Button(
         onClick = onBtnClick,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFf0f0f0),
+            containerColor = btnColor,
             contentColor = Color.Black,
         ),
         modifier = modifier
