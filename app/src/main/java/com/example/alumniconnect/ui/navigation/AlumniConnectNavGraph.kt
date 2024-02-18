@@ -25,6 +25,8 @@ enum class AlumniConnectNavDestinations(val title: String, val route: String) {
     Home(title = "home", route = "homeRoute"),
     Alumni(title = "alumni", route = "alumniRoute"),
     Profile(title = "profile", route = "profileRoute"),
+    AlumniDirectory(title = "alumniDirectory/{domainId}", route = "alumniDirectory"),
+    AlumniProfile(title = "alumniProfile/{userId}", route = "alumniProfile"),
 }
 
 @Composable
