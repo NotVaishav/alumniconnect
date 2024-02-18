@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +38,7 @@ import com.example.alumniconnect.ui.theme.AlumniConnectTheme
 
 data class Profile(val name: String, val image: Int)
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeaturedProfile(modifier: Modifier = Modifier) {
     val profileList = listOf(
@@ -53,7 +55,7 @@ fun FeaturedProfile(modifier: Modifier = Modifier) {
     )
     Column(
         modifier = modifier
-            .padding(10.dp)
+            .padding(horizontal = 10.dp)
     ) {
         Text(
             text = "Featured Profiles",
@@ -69,7 +71,8 @@ fun FeaturedProfile(modifier: Modifier = Modifier) {
                     modifier = modifier
                         .width(160.dp)
                         .height(180.dp)
-                        .background(color = Color.Transparent)
+                        .background(color = Color.Transparent),
+                    onClick = {}
                 ) {
                     Column(
                         modifier = modifier
@@ -77,7 +80,6 @@ fun FeaturedProfile(modifier: Modifier = Modifier) {
                             .fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
-
                     ) {
                         Box(
                             modifier = Modifier

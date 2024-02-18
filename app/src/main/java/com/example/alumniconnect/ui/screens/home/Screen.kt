@@ -36,7 +36,7 @@ import com.example.alumniconnect.ui.theme.AlumniConnectTheme
 @Composable
 fun AlumniHomeScreen(navController: NavController, modifier: Modifier = Modifier) {
     Scaffold(
-        topBar = { TopBar(screenTitle = "Alumnus") },
+        topBar = { TopBar(screenTitle = "Home") },
         bottomBar = { BottomNavBar(navController = navController) }) { innerPadding ->
         Column(modifier = modifier.padding(innerPadding)) {
             FeaturedProfile()
@@ -68,7 +68,7 @@ fun TopBar(
     CenterAlignedTopAppBar(title = {
         Text(
             text = screenTitle,
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Medium
         )
 
