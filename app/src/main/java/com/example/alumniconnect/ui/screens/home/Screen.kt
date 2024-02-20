@@ -45,17 +45,7 @@ fun AlumniHomeScreen(navController: NavController, modifier: Modifier = Modifier
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ProfileScreen(navController: NavController, modifier: Modifier = Modifier) {
-    Scaffold(
-        topBar = { TopBar(screenTitle = "Profile") },
-        bottomBar = { BottomNavBar(navController = navController) }) { innerPadding ->
-        Column(modifier = modifier.padding(innerPadding)) {
-            Text(text = "Profile")
-        }
-    }
-}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

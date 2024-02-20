@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.alumniconnect.ui.navigation.AlumniConnectNavDestinations
+import com.example.alumniconnect.ui.screens.profile.ProfileScreen
 import com.example.alumniconnect.ui.screens.signup.SignupScreen
 import com.example.alumniconnect.ui.screens.signup.SignupViewModel
 
