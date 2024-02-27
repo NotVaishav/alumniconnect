@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.alumniconnect.AlumniConnectApplication
+import com.example.alumniconnect.ui.screens.profile.ProfileViewModel
 import com.example.alumniconnect.ui.screens.signup.SignupViewModel
 import com.example.alumniconnect.ui.screens.welcome.WelcomeViewModel
 
@@ -17,6 +18,9 @@ object AppViewModelProvider {
         }
         initializer {
             WelcomeViewModel()
+        }
+        initializer {
+            ProfileViewModel()
         }
 
     }

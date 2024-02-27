@@ -25,7 +25,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
@@ -47,6 +49,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -72,9 +75,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.alumniconnect.R
+import com.example.alumniconnect.ui.AppViewModelProvider
 import com.example.alumniconnect.ui.navigation.AlumniConnectNavDestinations
 import com.example.alumniconnect.ui.screens.home.AlumniProfile
 import com.example.alumniconnect.ui.screens.home.BottomNavBar
@@ -83,17 +88,16 @@ import com.example.alumniconnect.ui.screens.home.TopBar
 import com.example.alumniconnect.ui.theme.AlumniConnectTheme
 
 @Composable
-fun ProfileScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun ProfileScreen(
+    navController: NavController, modifier: Modifier = Modifier,
+    profileViewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
+    val uiState by profileViewModel.uiState.collectAsState()
     val fontGrey = colorResource(id = R.color.secondary_grey)
-    val profileSubFields = listOf<SubField>(
-        SubField(Icons.Filled.Phone, "(902)-318-6993"),
-        SubField(Icons.Filled.Email, "vaishavtest@test.com")
-    )
 
     Scaffold(
         topBar = { TopBar(screenTitle = "Profile") },
         bottomBar = { BottomNavBar(navController = navController) }) { innerPadding ->
-
 
         Column(
             modifier = modifier
@@ -107,11 +111,14 @@ fun ProfileScreen(navController: NavController, modifier: Modifier = Modifier) {
                         .fillMaxSize()
                         .blur(10.dp),
                     contentScale = ContentScale.Crop,
-
                     )
             }
             Spacer(modifier = modifier.size(25.dp))
-            Column(modifier = modifier.padding(vertical = 20.dp, horizontal = 30.dp)) {
+            Column(
+                modifier = modifier
+                    .padding(vertical = 20.dp, horizontal = 30.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
                 Column(
                     modifier = modifier.padding(vertical = 15.dp),
                     verticalArrangement = Arrangement.Center
@@ -124,12 +131,16 @@ fun ProfileScreen(navController: NavController, modifier: Modifier = Modifier) {
                     Text(text = "Software Developer", color = fontGrey)
                 }
                 Spacer(modifier = modifier.size(10.dp))
-                InformationSection(
-                    mainFieldText = "Personal",
-                    mainFieldIcon = Icons.Filled.Person,
-                    subFields = profileSubFields,
-                    navController = navController
-                )
+                for (item in uiState.fields) {
+                    InformationSection(
+                        mainFieldText = item.key,
+                        mainFieldIcon = fieldIcons[item.key]!!,
+                        subFields = item.value,
+                        navController = navController
+                    )
+                    Spacer(modifier = modifier.size(15.dp))
+                }
+
             }
         }
     }
@@ -187,18 +198,17 @@ fun OverlappingImageBox(
 }
 
 
-data class SubField(var fieldIcon: ImageVector, var fieldText: String)
-
 @Composable
 fun InformationSection(
     modifier: Modifier = Modifier,
     mainFieldText: String,
-    mainFieldIcon: ImageVector,
-    subFields: List<SubField>,
+    mainFieldIcon: Any,
+    subFields: List<FieldItem>,
     navController: NavController
 ) {
     val fontGrey = colorResource(id = R.color.secondary_grey)
     var showContents by remember { mutableStateOf(false) }
+
     Card(
         modifier = modifier.bottomBorder(1.dp, Color.LightGray),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent)
@@ -218,7 +228,7 @@ fun InformationSection(
                     .clickable { showContents = !showContents }
 
             ) {
-                Icon(imageVector = mainFieldIcon, contentDescription = null)
+                GetUpdatedIcon(icon = mainFieldIcon)
                 Text(
                     text = mainFieldText,
                     modifier = modifier
@@ -258,13 +268,9 @@ fun InformationSection(
                             .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            imageVector = subFields[0].fieldIcon,
-                            contentDescription = null,
-                            tint = fontGrey
-                        )
+                        GetUpdatedIcon(icon = subFields[0].icon, tint = fontGrey)
                         Text(
-                            text = subFields[0].fieldText,
+                            text = subFields[0].value,
                             modifier = modifier
                                 .padding(start = 10.dp)
                                 .weight(1f),
@@ -296,13 +302,9 @@ fun InformationSection(
                     }
                     for (field in subFields.drop(1)) {
                         Row(modifier = modifier.padding(vertical = 4.dp)) {
-                            Icon(
-                                imageVector = field.fieldIcon,
-                                contentDescription = null,
-                                tint = fontGrey
-                            )
+                            GetUpdatedIcon(icon = field.icon, tint = fontGrey)
                             Text(
-                                text = field.fieldText,
+                                text = field.value,
                                 modifier = modifier.padding(start = 10.dp),
                                 color = fontGrey
                             )
@@ -314,7 +316,29 @@ fun InformationSection(
         }
     }
 
+}
 
+@Composable
+fun GetUpdatedIcon(modifier: Modifier = Modifier, icon: Any, tint: Color = Color.Black) {
+    when (icon) {
+        is ImageVector -> {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = tint,
+                modifier = modifier.size(24.dp)
+            )
+        }
+
+        is Int -> {
+            Icon(
+                painter = painterResource(id = icon),
+                contentDescription = null,
+                tint = tint,
+                modifier = modifier.size(24.dp)
+            )
+        }
+    }
 }
 
 fun Modifier.bottomBorder(strokeWidth: Dp, color: Color) = composed(
