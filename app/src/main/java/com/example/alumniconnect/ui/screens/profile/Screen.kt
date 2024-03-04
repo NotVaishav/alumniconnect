@@ -31,6 +31,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.sharp.KeyboardArrowDown
@@ -111,7 +112,7 @@ fun ProfileScreen(
                         .fillMaxSize()
                         .blur(10.dp),
                     contentScale = ContentScale.Crop,
-                    )
+                )
             }
             Spacer(modifier = modifier.size(25.dp))
             Column(
@@ -140,7 +141,6 @@ fun ProfileScreen(
                     )
                     Spacer(modifier = modifier.size(15.dp))
                 }
-
             }
         }
     }
@@ -204,7 +204,8 @@ fun InformationSection(
     mainFieldText: String,
     mainFieldIcon: Any,
     subFields: List<FieldItem>,
-    navController: NavController
+    navController: NavController,
+    optionForAll: Boolean = false
 ) {
     val fontGrey = colorResource(id = R.color.secondary_grey)
     var showContents by remember { mutableStateOf(false) }
@@ -290,14 +291,23 @@ fun InformationSection(
                                 ),
                             contentAlignment = Alignment.Center
                         ) {
-                            Icon(
-                                imageVector = Icons.Filled.Edit,
-                                contentDescription = null,
-                                tint = fontGrey,
-                                modifier = modifier
-                                    .size(16.dp)
-
-                            )
+                            if (optionForAll) {
+                                Icon(
+                                    imageVector = Icons.Filled.KeyboardArrowRight,
+                                    contentDescription = null,
+                                    tint = fontGrey,
+                                    modifier = modifier
+                                        .size(16.dp)
+                                )
+                            } else {
+                                Icon(
+                                    imageVector = Icons.Filled.Edit,
+                                    contentDescription = null,
+                                    tint = fontGrey,
+                                    modifier = modifier
+                                        .size(16.dp)
+                                )
+                            }
                         }
                     }
                     for (field in subFields.drop(1)) {
@@ -308,9 +318,32 @@ fun InformationSection(
                                 modifier = modifier.padding(start = 10.dp),
                                 color = fontGrey
                             )
+                            if (optionForAll) {
+                                Box(
+                                    modifier = modifier
+                                        .clip(CircleShape)
+                                        .wrapContentSize()
+                                        .size(20.dp)
+                                        .clickable(
+                                            interactionSource = remember { MutableInteractionSource() },
+                                            indication = rememberRipple(bounded = true),
+                                            onClick = {
+                                                navController.navigate("${AlumniConnectNavDestinations.ProfileEdit.route}/${mainFieldText}")
+                                            },
+                                        ),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.KeyboardArrowRight,
+                                        contentDescription = null,
+                                        tint = fontGrey,
+                                        modifier = modifier
+                                            .size(16.dp)
+                                    )
+                                }
+                            }
                         }
                     }
-
                 }
             }
         }

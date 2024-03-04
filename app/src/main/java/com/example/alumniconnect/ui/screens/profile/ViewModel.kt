@@ -1,9 +1,11 @@
 package com.example.alumniconnect.ui.screens.profile
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.lifecycle.ViewModel
@@ -94,7 +96,8 @@ val fieldIcons = mapOf(
     "Socials" to R.drawable.social_media,
     "Experience" to R.drawable.suitcase,
     "Education" to R.drawable.graduation,
-    "Content" to Icons.Filled.Build
+    "Resume" to Icons.Filled.List,
+    "Cover Letter" to Icons.Filled.Build,
 )
 
 data class EducationItem(
@@ -173,17 +176,19 @@ data class ProfileUIState(
                 icon = Icons.Filled.Info
             )
         ),
-        "Content" to listOf(
+        "Resume" to listOf(
             FieldItem(
                 fieldName = "Resume",
                 hidden = false,
                 value = "View Resume",
                 icon = Icons.Filled.Info
             ),
+        ),
+        "Cover Letter" to listOf(
             FieldItem(
                 fieldName = "Cover Letter",
                 hidden = false,
-                value = "View CL",
+                value = "View Cover Letter",
                 icon = Icons.Filled.Info
             )
         )
