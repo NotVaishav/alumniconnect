@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.alumniconnect.ui.navigation.AlumniConnectNavDestinations
+import com.example.alumniconnect.ui.screens.profile.ProfileScreen
 import com.example.alumniconnect.ui.screens.signup.SignupScreen
 import com.example.alumniconnect.ui.screens.signup.SignupViewModel
 
@@ -30,9 +31,6 @@ fun NavGraphBuilder.homeGraph(navController: NavController) {
                 Log.d("IKADE", domainId)
                 AlumniDirectoryScreen(navController = navController, domainId = domainId)
             }
-        }
-        composable(route = AlumniConnectNavDestinations.Profile.title) {
-            ProfileScreen(navController = navController)
         }
         composable(route = AlumniConnectNavDestinations.AlumniProfile.title) {backStackEntry ->
             val userId = backStackEntry.arguments?.getString("userId")

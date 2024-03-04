@@ -9,6 +9,9 @@ import androidx.navigation.navigation
 import com.example.alumniconnect.ui.AppViewModelProvider
 import com.example.alumniconnect.ui.screens.home.homeGraph
 import com.example.alumniconnect.ui.screens.login.LoginScreen
+import com.example.alumniconnect.ui.screens.profile.ProfileScreen
+import com.example.alumniconnect.ui.screens.profile.ProfileViewModel
+import com.example.alumniconnect.ui.screens.profile.profileGraph
 import com.example.alumniconnect.ui.screens.signup.SignupScreen
 import com.example.alumniconnect.ui.screens.signup.SignupUiState
 import com.example.alumniconnect.ui.screens.signup.SignupViewModel
@@ -25,6 +28,8 @@ enum class AlumniConnectNavDestinations(val title: String, val route: String) {
     Home(title = "home", route = "homeRoute"),
     Alumni(title = "alumni", route = "alumniRoute"),
     Profile(title = "profile", route = "profileRoute"),
+    ProfileMain(title = "profileMain", route = "profileMainRoute"),
+    ProfileEdit(title = "profileEdit/{editType}", route = "profileEdit"),
     AlumniDirectory(title = "alumniDirectory/{domainId}", route = "alumniDirectory"),
     AlumniProfile(title = "alumniProfile/{userId}", route = "alumniProfile"),
 }
@@ -33,6 +38,7 @@ enum class AlumniConnectNavDestinations(val title: String, val route: String) {
 fun AlumniConnectNavGraph(
     navController: NavHostController,
     signupViewModel: SignupViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    profileViewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     NavHost(
         navController = navController,
@@ -48,5 +54,6 @@ fun AlumniConnectNavGraph(
             LoginScreen()
         }
         homeGraph(navController = navController)
+        profileGraph(navController = navController, profileViewModel)
     }
 }

@@ -58,7 +58,10 @@ sealed class Screen(val route: String, val routeList: Array<String>, val icon: I
     data object Profile :
         Screen(
             AlumniConnectNavDestinations.Profile.title,
-            arrayOf(AlumniConnectNavDestinations.Profile.title),
+            arrayOf(
+                AlumniConnectNavDestinations.Profile.title,
+                AlumniConnectNavDestinations.ProfileEdit.title
+            ),
             Icons.Filled.AccountCircle
         )
 }
@@ -107,7 +110,7 @@ fun BottomNavBar(modifier: Modifier = Modifier, navController: NavController) {
                         .colors(
                             selectedIconColor = Color.Blue,
                             indicatorColor = Color(0xFFF5F5F5),
-                            ),
+                        ),
 
                     modifier = modifier.wrapContentSize()
                 )

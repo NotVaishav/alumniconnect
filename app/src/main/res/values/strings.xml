@@ -10,4 +10,6 @@
     <string name="begin">Let\'s begin</string>
     <string name="view_resume">View Resume</string>
     <string name="view_cl">View CL</string>
+    <string name="edit_resume">Edit Resume</string>
+    <string name="edit_cl">Edit Cover Letter</string>
 </resources>
