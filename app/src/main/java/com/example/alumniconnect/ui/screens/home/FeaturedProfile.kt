@@ -41,18 +41,6 @@ data class Profile(val name: String, val image: Int)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeaturedProfile(modifier: Modifier = Modifier) {
-    val profileList = listOf(
-        Profile("John Doe", R.drawable.profile_pic),
-        Profile("Jane Smith", R.drawable.login_img),
-        Profile("Mike Johnson", R.drawable.profile_pic),
-        Profile("Mike Johnson", R.drawable.profile_pic),
-        Profile("Mike Johnson", R.drawable.profile_pic),
-        Profile("Mike Johnson", R.drawable.profile_pic),
-        Profile("Mike Johnson", R.drawable.profile_pic),
-        Profile("Mike Johnson", R.drawable.login_img),
-        Profile("Mike Johnson", R.drawable.profile_pic),
-        // Add more profiles as needed
-    )
     Column(
         modifier = modifier
             .padding(horizontal = 10.dp)
@@ -63,9 +51,10 @@ fun FeaturedProfile(modifier: Modifier = Modifier) {
             modifier = modifier.padding(10.dp),
             fontWeight = FontWeight.Medium
         )
-        LazyRow( modifier = modifier.padding(horizontal = 10.dp)
+        LazyRow(
+            modifier = modifier.padding(horizontal = 10.dp)
         ) {
-            itemsIndexed(profileList) { index, item ->
+            itemsIndexed(userList) { index, item ->
                 Card(
                     shape = RoundedCornerShape(0.dp),
                     modifier = modifier
@@ -90,14 +79,14 @@ fun FeaturedProfile(modifier: Modifier = Modifier) {
                                 ),
                         ) {
                             Image(
-                                painter = painterResource(id = item.image),
+                                painter = painterResource(id = item.profilePic),
                                 contentDescription = null,
                                 modifier = modifier.size(140.dp)
                             )
                         }
                         Spacer(modifier = modifier.size(10.dp))
                         Text(
-                            text = item.name,
+                            text = item.firstName + " " + item.lastName,
 //                        modifier = modifier.background(color = Color.White),
                             textAlign = TextAlign.Center,
                             modifier = modifier.fillMaxWidth()

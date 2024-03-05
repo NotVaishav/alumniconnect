@@ -74,7 +74,8 @@ fun TopBar(
                     )
                 }
             }
-        })
+        }
+    )
 }
 
 @Preview(showBackground = true)

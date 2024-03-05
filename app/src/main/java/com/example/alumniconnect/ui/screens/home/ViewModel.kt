@@ -2,6 +2,8 @@ package com.example.alumniconnect.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import com.example.alumniconnect.R
+import com.example.alumniconnect.ui.screens.profile.EducationItem
+import com.example.alumniconnect.ui.screens.profile.ExperienceItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,8 +14,8 @@ class HomeViewModel() : ViewModel() {
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     fun onSearchTextChange(text: String) {
-        val alumniList = alumniList.filter { alumni ->
-            alumni.name.contains(text, ignoreCase = true) || alumni.name.contains(
+        val alumniList = userList.filter { user ->
+            user.firstName.contains(text, ignoreCase = true) || user.firstName.contains(
                 text,
                 ignoreCase = true
             )
@@ -39,63 +41,82 @@ class HomeViewModel() : ViewModel() {
 }
 
 
-data class AlumniProfile(val profilePic: Int, val name: String, val profession: String)
+data class UserProfile(
+    val profilePic: Int,
+    val firstName: String,
+    val lastName: String,
+    val role: String,
+    val about: String,
+    val domain: String? = null,
+    val contactNumber: String? = null,
+    val isFeatured: Boolean = true,
+    val educationInformation: List<EducationItem> = listOf(),
+    val experienceInformation: List<ExperienceItem> = listOf(),
+    val resume: Int? = null,
+    val coverLetter: Int? = null,
+    val instagramId: String? = null,
+    val linkedInId: String? = null,
+    val facebookId: String? = null
+)
 
-val alumniList = listOf<AlumniProfile>(
-    AlumniProfile(
-        R.drawable.profile_pic,
-        "John Doe",
-        "Software Developer"
-    ),
-    AlumniProfile(
-        R.drawable.profile_pic,
-        "John Doe",
-        "Software Developer"
-    ),
-    AlumniProfile(
-        R.drawable.profile_pic,
-        "Vaishav Doe",
-        "Software Developer"
-    ),
-    AlumniProfile(
-        R.drawable.profile_pic,
-        "John Doe",
-        "Software Developer"
-    ),
-    AlumniProfile(
-        R.drawable.profile_pic,
-        "John Doe",
-        "Software Developer"
-    ),
-    AlumniProfile(
-        R.drawable.profile_pic,
-        "John Doe",
-        "Software Developer"
-    ),
-    AlumniProfile(
-        R.drawable.profile_pic,
-        "John Doe",
-        "Software Developer"
-    ),
-    AlumniProfile(
-        R.drawable.profile_pic,
-        "John Doe",
-        "Software Developer"
-    ),
-    AlumniProfile(
-        R.drawable.profile_pic,
-        "John Doe",
-        "Software Developer"
-    ),
-    AlumniProfile(
-        R.drawable.profile_pic,
-        "John Doe",
-        "Software Developer"
+data class Domain(val name: String, val image: Int)
+
+val userList = listOf(
+    UserProfile(
+        profilePic = R.drawable.profile_pic,
+        firstName = "John",
+        lastName = "Doe",
+        role = "Software Developer",
+        about = "I'm a positive person. I love to travel and eat. Always available to chat",
+        domain = "IT",
+        contactNumber = "(902)-318-6993",
+        isFeatured = true,
+        educationInformation = listOf(
+            EducationItem(
+                "St. Francis Xavier University",
+                "Master's degree, Applied Computer Science",
+                "Sep 2022",
+                endDate = "May 2024"
+            )
+        ),
+        experienceInformation = listOf(
+            ExperienceItem(
+                "Software Development Intern",
+                "Dash Hudson",
+                "May 2023",
+                endDate = "Dec 2024",
+                isCoop = true,
+            ),
+            ExperienceItem(
+                "Python Developer",
+                "Aptagrim",
+                "Aug 2021",
+                endDate = "Aug 2022",
+            )
+        ),
+        resume = R.raw.madmidterm1,
+        coverLetter = R.raw.madmidterm1,
+        instagramId = "@vaishav",
+        linkedInId = "@vaishavdhepe",
+        facebookId = "@notvaishav"
     )
+)
+
+val domainsList = listOf(
+    Domain("Engineering", R.drawable.profile_pic),
+    Domain("Design", R.drawable.login_img),
+    Domain("Product Management", R.drawable.profile_pic),
+    Domain("Data Science", R.drawable.profile_pic),
+    Domain("Marketing", R.drawable.profile_pic),
+    Domain("Sales", R.drawable.profile_pic),
+    Domain("Finance", R.drawable.profile_pic),
+    Domain("Human Resources", R.drawable.login_img),
+    Domain("Legal", R.drawable.profile_pic),
+    Domain("IT", R.drawable.profile_pic),
 )
 
 data class HomeUiState(
     var isSearching: Boolean = false,
     var searchText: String = "",
-    var currentList: List<AlumniProfile> = alumniList
+    var currentList: List<UserProfile> = userList
 )

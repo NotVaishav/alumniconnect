@@ -144,12 +144,11 @@ fun AppSearchBar(
 
 @Composable
 fun AlumniList(modifier: Modifier = Modifier, navController: NavController, uiState: HomeUiState) {
-
     LazyColumn() {
         itemsIndexed(uiState.currentList) { index, item ->
             AlumniTile(
                 alumniProfile = item,
-                onProfileClick = { navController.navigate("${AlumniConnectNavDestinations.AlumniProfile.route}/1") })
+                onProfileClick = { navController.navigate("${AlumniConnectNavDestinations.AlumniProfile.route}/${index}") })
         }
     }
 }
@@ -158,7 +157,7 @@ fun AlumniList(modifier: Modifier = Modifier, navController: NavController, uiSt
 @Composable
 fun AlumniTile(
     modifier: Modifier = Modifier,
-    alumniProfile: AlumniProfile,
+    alumniProfile: UserProfile,
     onProfileClick: () -> Unit = {}
 ) {
     val fontGrey = colorResource(id = R.color.secondary_grey)
@@ -184,13 +183,13 @@ fun AlumniTile(
 //            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = alumniProfile.name,
+                text = alumniProfile.firstName + " " + alumniProfile.lastName,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Medium,
                 modifier = modifier.padding(top = 10.dp)
             )
             Text(
-                text = alumniProfile.profession,
+                text = alumniProfile.role,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Normal,
                 color = fontGrey
