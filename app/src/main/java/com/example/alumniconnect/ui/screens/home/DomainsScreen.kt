@@ -31,22 +31,9 @@ import com.example.alumniconnect.R
 import com.example.alumniconnect.ui.navigation.AlumniConnectNavDestinations
 
 
-data class Domain(val name: String, val image: Int)
-
 @Composable
 fun DomainsSection(modifier: Modifier = Modifier, navController: NavController) {
-    val domainsList = listOf(
-        Domain("Engineering", R.drawable.profile_pic),
-        Domain("Design", R.drawable.login_img),
-        Domain("Product Management", R.drawable.profile_pic),
-        Domain("Data Science", R.drawable.profile_pic),
-        Domain("Marketing", R.drawable.profile_pic),
-        Domain("Sales", R.drawable.profile_pic),
-        Domain("Finance", R.drawable.profile_pic),
-        Domain("Human Resources", R.drawable.login_img),
-        Domain("Legal", R.drawable.profile_pic),
-        // Add more profiles as needed
-    )
+
     val primaryGreyColor = colorResource(id = R.color.btn_outline)
     val btnTextColor = colorResource(id = R.color.outline_grey)
 

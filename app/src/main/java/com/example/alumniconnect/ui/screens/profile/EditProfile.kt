@@ -94,7 +94,6 @@ fun EditProfile(
                 .verticalScroll(rememberScrollState())
         ) {
             if (editType == "Resume") {
-
                 Spacer(modifier = modifier.size(20.dp))
                 HorizontalPDFReader(
                     state = pdfState,

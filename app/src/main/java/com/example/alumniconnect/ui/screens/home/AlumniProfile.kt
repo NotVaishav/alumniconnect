@@ -66,7 +66,11 @@ import com.example.alumniconnect.ui.common.PrimaryButton
 import com.example.alumniconnect.ui.theme.AlumniConnectTheme
 
 @Composable
-fun AlumniProfile(navController: NavController, userId: String, modifier: Modifier = Modifier) {
+fun AlumniProfile(
+    navController: NavController,
+    userProfile: UserProfile,
+    modifier: Modifier = Modifier
+) {
     var fontGrey = colorResource(id = R.color.secondary_grey)
     val state = rememberScrollState()
     val showProfile = state.value == 0
@@ -134,22 +138,22 @@ fun AlumniProfile(navController: NavController, userId: String, modifier: Modifi
                             .verticalScroll(state)
                     ) {
                         Spacer(modifier = modifier.size(50.dp))
-                        ProfileSection(fontColor = fontGrey)
-                        SocialsRow()
+                        ProfileSection(fontColor = fontGrey, userProfile = userProfile)
+                        SocialsRow(userProfile = userProfile)
                         Spacer(modifier = modifier.size(10.dp))
                         HitsRow(fontColor = fontGrey)
                         ButtonsRow()
-                        CoopExperienceSection(fontColor = fontGrey)
+                        CoopExperienceSection(fontColor = fontGrey, userProfile = userProfile)
                         Divider(
                             thickness = 1.dp,
                             modifier = modifier.padding(horizontal = 5.dp, vertical = 5.dp)
                         )
-                        ExperienceSection(fontColor = fontGrey)
+                        ExperienceSection(fontColor = fontGrey, userProfile = userProfile)
                         Divider(
                             thickness = 1.dp,
                             modifier = modifier.padding(horizontal = 5.dp, vertical = 5.dp)
                         )
-                        EducationSection(fontColor = fontGrey)
+                        EducationSection(fontColor = fontGrey, userProfile = userProfile)
                     }
                 }
                 androidx.compose.animation.AnimatedVisibility(
@@ -174,7 +178,7 @@ fun AlumniProfile(navController: NavController, userId: String, modifier: Modifi
                                 )
                         ) {
                             Image(
-                                painter = painterResource(id = R.drawable.profile_pic),
+                                painter = painterResource(id = userProfile.profilePic),
                                 contentDescription = null,
                                 modifier = modifier
                                     .fillMaxSize()
@@ -223,19 +227,19 @@ fun OverlappingImageBox(
 
 
 @Composable
-fun ProfileSection(modifier: Modifier = Modifier, fontColor: Color) {
+fun ProfileSection(modifier: Modifier = Modifier, fontColor: Color, userProfile: UserProfile) {
     Text(
-        text = "Vaishav Dhepe",
+        text = userProfile.firstName + " " + userProfile.lastName,
         style = androidx.compose.material3.MaterialTheme.typography.headlineMedium
     )
     Text(
-        text = "Software Engineer",
+        text = userProfile.role,
         color = fontColor,
         modifier = modifier.padding(vertical = 1.dp)
     )
     Spacer(modifier = modifier.size(10.dp))
     Text(
-        text = "I'm a positive person. I love to travel and eat. Always available to chat",
+        text = userProfile.about,
         textAlign = TextAlign.Center,
         modifier = modifier.padding(10.dp)
     )
@@ -243,7 +247,7 @@ fun ProfileSection(modifier: Modifier = Modifier, fontColor: Color) {
 
 
 @Composable
-fun SocialsRow(modifier: Modifier = Modifier) {
+fun SocialsRow(modifier: Modifier = Modifier, userProfile: UserProfile) {
     Row(modifier = modifier) {
         Box(modifier = modifier.padding(horizontal = 10.dp)) {
             IconButton(onClick = {}) {
@@ -388,7 +392,11 @@ fun ButtonsRow(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CoopExperienceSection(modifier: Modifier = Modifier, fontColor: Color) {
+fun CoopExperienceSection(
+    modifier: Modifier = Modifier,
+    fontColor: Color,
+    userProfile: UserProfile
+) {
     Column(
         horizontalAlignment = Alignment.Start,
         modifier = modifier
@@ -417,38 +425,40 @@ fun CoopExperienceSection(modifier: Modifier = Modifier, fontColor: Color) {
                     modifier = modifier.size(40.dp)
                 )
             }
-
-            Column(
-                modifier = modifier
-                    .padding(start = 15.dp),
-            ) {
-                Text(
-                    text = "Software Development Intern",
-                    fontWeight = FontWeight.Medium,
-                    modifier = modifier.padding(bottom = 2.dp)
-                )
-                Text(
-                    text = "Dash Hudson",
-                    fontSize = 12.sp
-                )
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = modifier.fillMaxWidth()
+            for (each in userProfile.experienceInformation.filter { it.isCoop }) {
+                Column(
+                    modifier = modifier
+                        .padding(start = 15.dp),
                 ) {
                     Text(
-                        text = "May 2023 - Dec 2023",
-                        fontSize = 10.sp,
-                        color = fontColor,
-                        modifier = modifier.padding(vertical = 1.dp)
+                        text = each.role,
+                        fontWeight = FontWeight.Medium,
+                        modifier = modifier.padding(bottom = 2.dp)
                     )
                     Text(
-                        text = "View insights",
-                        fontSize = 10.sp,
-                        modifier = modifier.padding(vertical = 1.dp),
-                        textDecoration = TextDecoration.Underline
+                        text = each.company,
+                        fontSize = 12.sp
                     )
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "${each.startDate} - ${each.endDate}",
+                            fontSize = 10.sp,
+                            color = fontColor,
+                            modifier = modifier.padding(vertical = 1.dp)
+                        )
+                        Text(
+                            text = "View insights",
+                            fontSize = 10.sp,
+                            modifier = modifier.padding(vertical = 1.dp),
+                            textDecoration = TextDecoration.Underline
+                        )
+                    }
                 }
             }
+
 
         }
     }
@@ -456,7 +466,7 @@ fun CoopExperienceSection(modifier: Modifier = Modifier, fontColor: Color) {
 
 
 @Composable
-fun ExperienceSection(modifier: Modifier = Modifier, fontColor: Color) {
+fun ExperienceSection(modifier: Modifier = Modifier, fontColor: Color, userProfile: UserProfile) {
     Column(
         horizontalAlignment = Alignment.Start,
         modifier = modifier
@@ -482,26 +492,29 @@ fun ExperienceSection(modifier: Modifier = Modifier, fontColor: Color) {
                     modifier = modifier.size(40.dp)
                 )
             }
-            Column(
-                modifier = modifier
-                    .padding(start = 15.dp),
-            ) {
-                Text(
-                    text = "Python Developer",
-                    fontWeight = FontWeight.Medium,
-                    modifier = modifier.padding(bottom = 2.dp)
-                )
-                Text(
-                    text = "Aptagrim Limited",
-                    fontSize = 12.sp
-                )
-                Text(
-                    text = "Aug 2021 - Aug 2022",
-                    fontSize = 10.sp,
-                    color = fontColor,
-                    modifier = modifier.padding(vertical = 1.dp)
-                )
+            for (each in userProfile.experienceInformation.filter { !it.isCoop }) {
+                Column(
+                    modifier = modifier
+                        .padding(start = 15.dp),
+                ) {
+                    Text(
+                        text = each.role,
+                        fontWeight = FontWeight.Medium,
+                        modifier = modifier.padding(bottom = 2.dp)
+                    )
+                    Text(
+                        text = each.company,
+                        fontSize = 12.sp
+                    )
+                    Text(
+                        text = "${each.startDate} - ${each.endDate}",
+                        fontSize = 10.sp,
+                        color = fontColor,
+                        modifier = modifier.padding(vertical = 1.dp)
+                    )
+                }
             }
+
 
         }
     }
@@ -509,7 +522,7 @@ fun ExperienceSection(modifier: Modifier = Modifier, fontColor: Color) {
 
 
 @Composable
-fun EducationSection(modifier: Modifier = Modifier, fontColor: Color) {
+fun EducationSection(modifier: Modifier = Modifier, fontColor: Color, userProfile: UserProfile) {
     Column(
         horizontalAlignment = Alignment.Start,
         modifier = modifier
@@ -532,26 +545,29 @@ fun EducationSection(modifier: Modifier = Modifier, fontColor: Color) {
                 contentDescription = null,
                 modifier = modifier.size(50.dp)
             )
-            Column(
-                modifier = modifier
-                    .padding(start = 15.dp),
-            ) {
-                Text(
-                    text = "St. Francis Xavier University",
-                    fontWeight = FontWeight.Medium,
-                    modifier = modifier.padding(bottom = 2.dp)
-                )
-                Text(
-                    text = "Master's degree, Applied Computer Science",
-                    fontSize = 12.sp
-                )
-                Text(
-                    text = "Sep 2022 - May 2024",
-                    fontSize = 10.sp,
-                    color = fontColor,
-                    modifier = modifier.padding(vertical = 1.dp)
-                )
+            for (each in userProfile.educationInformation) {
+                Column(
+                    modifier = modifier
+                        .padding(start = 15.dp),
+                ) {
+                    Text(
+                        text = each.school,
+                        fontWeight = FontWeight.Medium,
+                        modifier = modifier.padding(bottom = 2.dp)
+                    )
+                    Text(
+                        text = each.degree,
+                        fontSize = 12.sp
+                    )
+                    Text(
+                        text = "${each.startDate} - ${each.endDate}",
+                        fontSize = 10.sp,
+                        color = fontColor,
+                        modifier = modifier.padding(vertical = 1.dp)
+                    )
+                }
             }
+
         }
     }
 }
@@ -561,6 +577,6 @@ fun EducationSection(modifier: Modifier = Modifier, fontColor: Color) {
 fun AlumniProfilePreview() {
     val navController = rememberNavController()
     AlumniConnectTheme {
-        AlumniProfile(navController = navController, userId = "1")
+        AlumniProfile(navController = navController, userProfile = userList[0])
     }
 }

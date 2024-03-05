@@ -32,10 +32,10 @@ fun NavGraphBuilder.homeGraph(navController: NavController) {
                 AlumniDirectoryScreen(navController = navController, domainId = domainId)
             }
         }
-        composable(route = AlumniConnectNavDestinations.AlumniProfile.title) {backStackEntry ->
+        composable(route = AlumniConnectNavDestinations.AlumniProfile.title) { backStackEntry ->
             val userId = backStackEntry.arguments?.getString("userId")
             if (userId != null) {
-                AlumniProfile(navController = navController, userId = userId)
+                AlumniProfile(navController = navController, userProfile = userList[userId.toInt()])
             }
         }
     }

@@ -18,4 +18,6 @@ data class User(
     val password: String,
     val graduationYear: Int? = null,
     val coopYear: Int? = null,
+    val domain: String? = null,
+
 )
