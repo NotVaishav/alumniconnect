@@ -86,7 +86,7 @@ fun AlumniDirectoryScreen(
                 navController = navController
             )
             Spacer(modifier = modifier.size(10.dp))
-            AlumniList(navController = navController, uiState = uiState)
+            AlumniList(navController = navController, uiState = uiState, domainId = domainId)
         }
     }
 }
@@ -132,10 +132,10 @@ fun AppSearchBar(
         ),
     ) {
         LazyColumn() {
-            itemsIndexed(uiState.currentList) { index, item ->
+            itemsIndexed(uiState.currentList.filter { it.domain == domainId }) { index, item ->
                 AlumniTile(
                     alumniProfile = item,
-                    onProfileClick = { navController.navigate("${AlumniConnectNavDestinations.AlumniProfile.route}/1") })
+                    onProfileClick = { navController.navigate("${AlumniConnectNavDestinations.AlumniProfile.route}/${item.id}") })
             }
         }
     }
@@ -143,12 +143,17 @@ fun AppSearchBar(
 
 
 @Composable
-fun AlumniList(modifier: Modifier = Modifier, navController: NavController, uiState: HomeUiState) {
+fun AlumniList(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    uiState: HomeUiState,
+    domainId: String
+) {
     LazyColumn() {
-        itemsIndexed(uiState.currentList) { index, item ->
+        itemsIndexed(uiState.currentList.filter { it.domain == domainId }) { index, item ->
             AlumniTile(
                 alumniProfile = item,
-                onProfileClick = { navController.navigate("${AlumniConnectNavDestinations.AlumniProfile.route}/${index}") })
+                onProfileClick = { navController.navigate("${AlumniConnectNavDestinations.AlumniProfile.route}/${item.id}") })
         }
     }
 }

@@ -32,15 +32,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.alumniconnect.R
+import com.example.alumniconnect.ui.navigation.AlumniConnectNavDestinations
 import com.example.alumniconnect.ui.theme.AlumniConnectTheme
 
 data class Profile(val name: String, val image: Int)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FeaturedProfile(modifier: Modifier = Modifier) {
+fun FeaturedProfile(modifier: Modifier = Modifier, navController: NavController) {
     Column(
         modifier = modifier
             .padding(horizontal = 10.dp)
@@ -54,14 +56,16 @@ fun FeaturedProfile(modifier: Modifier = Modifier) {
         LazyRow(
             modifier = modifier.padding(horizontal = 10.dp)
         ) {
-            itemsIndexed(userList) { index, item ->
+            itemsIndexed(userList.filter { it.isFeatured }) { index, item ->
                 Card(
                     shape = RoundedCornerShape(0.dp),
                     modifier = modifier
                         .width(160.dp)
                         .height(180.dp)
                         .background(color = Color.Transparent),
-                    onClick = {}
+                    onClick = {
+                        navController.navigate("${AlumniConnectNavDestinations.AlumniProfile.route}/${item.id}")
+                    }
                 ) {
                     Column(
                         modifier = modifier
@@ -103,6 +107,7 @@ fun FeaturedProfile(modifier: Modifier = Modifier) {
 @Composable
 fun FeaturedProfilePreview() {
     AlumniConnectTheme {
-        FeaturedProfile()
+        val navController = rememberNavController()
+        FeaturedProfile(navController = navController)
     }
 }

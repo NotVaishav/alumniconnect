@@ -19,5 +19,4 @@ data class User(
     val graduationYear: Int? = null,
     val coopYear: Int? = null,
     val domain: String? = null,
-
 )

@@ -26,16 +26,29 @@ fun NavGraphBuilder.homeGraph(navController: NavController) {
         }
         composable(route = AlumniConnectNavDestinations.AlumniDirectory.title) { backStackEntry ->
             val domainId = backStackEntry.arguments?.getString("domainId")
-
             if (domainId != null) {
-                Log.d("IKADE", domainId)
                 AlumniDirectoryScreen(navController = navController, domainId = domainId)
             }
         }
         composable(route = AlumniConnectNavDestinations.AlumniProfile.title) { backStackEntry ->
             val userId = backStackEntry.arguments?.getString("userId")
             if (userId != null) {
-                AlumniProfile(navController = navController, userProfile = userList[userId.toInt()])
+                AlumniProfile(
+                    navController = navController,
+                    userProfile = userList.find { it.id == userId.toInt() }!!,
+                )
+            }
+        }
+        composable(route = AlumniConnectNavDestinations.Content.title) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId")
+            val contentType = backStackEntry.arguments?.getString("type")
+            val isResume = contentType == "resume"
+            if (userId != null) {
+                ContentScreen(
+                    navController = navController,
+                    userProfile = userList.find { it.id == userId.toInt() }!!,
+                    isResume = isResume
+                )
             }
         }
     }

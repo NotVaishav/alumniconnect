@@ -19,6 +19,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -26,16 +28,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.alumniconnect.R
+import com.example.alumniconnect.ui.AppViewModelProvider
 import com.example.alumniconnect.ui.navigation.AlumniConnectNavDestinations
 
 
 @Composable
-fun DomainsSection(modifier: Modifier = Modifier, navController: NavController) {
+fun DomainsSection(
+    modifier: Modifier = Modifier, navController: NavController,
+    homeViewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
+) {
 
     val primaryGreyColor = colorResource(id = R.color.btn_outline)
     val btnTextColor = colorResource(id = R.color.outline_grey)
+    val uiState by homeViewModel.uiState.collectAsState()
 
     Column(
         modifier = modifier
@@ -51,6 +59,19 @@ fun DomainsSection(modifier: Modifier = Modifier, navController: NavController) 
             modifier = modifier.padding(10.dp)
         ) {
             itemsIndexed(domainsList) { index, item ->
+                val alumniText =
+                    when (val alumniCount = homeViewModel.getAlumniCount(domain = item.name)) {
+                        0 -> {
+                            "No alumnus"
+                        }
+                        1 -> {
+                            "1 alumni"
+                        }
+                        else -> {
+                            "${alumniCount - 1}+ alumnus"
+                        }
+                    }
+
                 OutlinedIconButton(
                     onClick = { navController.navigate("${AlumniConnectNavDestinations.AlumniDirectory.route}/${item.name}") },
                     modifier = modifier
@@ -59,7 +80,6 @@ fun DomainsSection(modifier: Modifier = Modifier, navController: NavController) 
                         .padding(vertical = 5.dp),
                     border = BorderStroke(width = 1.dp, color = primaryGreyColor),
                     shape = RoundedCornerShape(10.dp)
-
                 ) {
                     Column(
                         horizontalAlignment = Alignment.Start,
@@ -69,7 +89,10 @@ fun DomainsSection(modifier: Modifier = Modifier, navController: NavController) 
                     ) {
                         Text(text = item.name, fontWeight = FontWeight.Medium)
                         Spacer(modifier = modifier.size(5.dp))
-                        Text(text = "100+ alumni", color = btnTextColor)
+                        Text(
+                            text = alumniText,
+                            color = btnTextColor
+                        )
                     }
                 }
             }

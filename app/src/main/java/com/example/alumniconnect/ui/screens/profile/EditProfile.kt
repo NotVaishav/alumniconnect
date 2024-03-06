@@ -72,7 +72,6 @@ fun EditProfile(
     val pdfState = rememberHorizontalPdfReaderState(
         resource = ResourceType.Asset(R.raw.madmidterm1),
         isZoomEnable = true
-
     )
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val launcher =
