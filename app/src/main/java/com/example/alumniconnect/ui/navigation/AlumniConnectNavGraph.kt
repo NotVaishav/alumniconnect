@@ -26,6 +26,7 @@ enum class AlumniConnectNavDestinations(val title: String, val route: String) {
     Alumnus(title = "alumnus", route = "alumnusRoute"),
     Credentials(title = "credentials", route = "credentialsRoute"),
     Home(title = "home", route = "homeRoute"),
+    Content(title = "content/{type}/{userId}", route = "content"),
     Alumni(title = "alumni", route = "alumniRoute"),
     Profile(title = "profile", route = "profileRoute"),
     ProfileMain(title = "profileMain", route = "profileMainRoute"),

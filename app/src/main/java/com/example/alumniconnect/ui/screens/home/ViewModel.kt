@@ -38,15 +38,22 @@ class HomeViewModel() : ViewModel() {
             onSearchTextChange("")
         }
     }
+
+    fun getAlumniCount(domain: String): Int {
+        return userList.count { it.domain == domain }
+    }
 }
 
 
 data class UserProfile(
+    val id: Int,
     val profilePic: Int,
+    val backGroundPic: Int,
     val firstName: String,
     val lastName: String,
     val role: String,
     val about: String,
+    val isStudent: Boolean = false,
     val domain: String? = null,
     val contactNumber: String? = null,
     val isFeatured: Boolean = true,
@@ -63,7 +70,9 @@ data class Domain(val name: String, val image: Int)
 
 val userList = listOf(
     UserProfile(
+        id = 1,
         profilePic = R.drawable.profile_pic,
+        backGroundPic = R.drawable.profile_pic,
         firstName = "John",
         lastName = "Doe",
         role = "Software Developer",

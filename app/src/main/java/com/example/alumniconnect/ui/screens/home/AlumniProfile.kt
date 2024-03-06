@@ -63,6 +63,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.alumniconnect.R
 import com.example.alumniconnect.ui.common.PrimaryButton
+import com.example.alumniconnect.ui.navigation.AlumniConnectNavDestinations
 import com.example.alumniconnect.ui.theme.AlumniConnectTheme
 
 @Composable
@@ -97,7 +98,7 @@ fun AlumniProfile(
                             end.linkTo(parent.end)
                         }) {
                     Image(
-                        painter = painterResource(id = R.drawable.profile_pic),
+                        painter = painterResource(id = userProfile.backGroundPic),
                         contentDescription = null,
                         modifier = modifier
                             .fillMaxSize()
@@ -142,7 +143,7 @@ fun AlumniProfile(
                         SocialsRow(userProfile = userProfile)
                         Spacer(modifier = modifier.size(10.dp))
                         HitsRow(fontColor = fontGrey)
-                        ButtonsRow()
+                        ButtonsRow(navController = navController, userProfile = userProfile)
                         CoopExperienceSection(fontColor = fontGrey, userProfile = userProfile)
                         Divider(
                             thickness = 1.dp,
@@ -373,17 +374,21 @@ fun HitsRow(modifier: Modifier = Modifier, fontColor: Color) {
 }
 
 @Composable
-fun ButtonsRow(modifier: Modifier = Modifier) {
+fun ButtonsRow(
+    modifier: Modifier = Modifier,
+    userProfile: UserProfile,
+    navController: NavController
+) {
     Row(modifier = modifier.padding(vertical = 5.dp)) {
         PrimaryButton(
-            onBtnClick = { /*TODO*/ },
+            onBtnClick = { navController.navigate("${AlumniConnectNavDestinations.Content.route}/resume/${userProfile.id}") },
             btnText = R.string.view_resume,
             btnColor = Color(0xFFd8d8d8),
             modifier = modifier.weight(1f)
         )
         Spacer(modifier = modifier.size(10.dp))
         PrimaryButton(
-            onBtnClick = { /*TODO*/ },
+            onBtnClick = { navController.navigate("${AlumniConnectNavDestinations.Content.route}/cl/${userProfile.id}") },
             btnText = R.string.view_cl,
             btnColor = Color(0xFFd8d8d8),
             modifier = modifier.weight(1f)
