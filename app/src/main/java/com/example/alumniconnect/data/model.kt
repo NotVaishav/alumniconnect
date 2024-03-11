@@ -69,7 +69,7 @@ data class User(
 data class EducationItem(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val userId: Int,
+    var userId: Int,
     var school: String,
     var degree: String,
     var startDate: String,
@@ -88,7 +88,7 @@ data class EducationItem(
 data class ExperienceItem(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val userId: Int,
+    var userId: Int,
     var role: String,
     var company: String,
     var startDate: String,

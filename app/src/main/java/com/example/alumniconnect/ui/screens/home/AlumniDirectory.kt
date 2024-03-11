@@ -65,6 +65,10 @@ fun AlumniDirectoryScreen(
     homeViewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val uiState by homeViewModel.uiState.collectAsState()
+    val scope = rememberCoroutineScope()
+    scope.launch {
+        homeViewModel.getDomainInfo(domainId)
+    }
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {

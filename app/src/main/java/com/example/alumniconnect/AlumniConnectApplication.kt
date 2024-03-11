@@ -53,61 +53,159 @@ class AlumniConnectApplication : Application() {
         GlobalScope.launch(Dispatchers.IO) {
             // Insert your initial data here
             // For example:
-            var domainId = 1
-            try {
-                domainId = db.domainDao().insert(Domain(name = "Engineering")).toInt()
+            val domainIds = mutableListOf<Int>()
+            val domainNames = listOf(
+                "Engineering", "Information Technology", "Healthcare",
+                "Finance", "Marketing", "Education"
+            )
 
-            } catch (e: Exception) {
-                // Handle the exception here
-                // For example, log the error or show a toast message
-                Log.e("Database", "Error inserting initial data: ${e.message}")
+            domainNames.forEach { name ->
+                try {
+                    val domainId = db.domainDao().insert(Domain(name = name)).toInt()
+                    domainIds.add(domainId)
+                } catch (e: Exception) {
+                    // Handle the exception here
+                    // For example, log the error or show a toast message
+                    Log.e("Database", "Error inserting initial data: ${e.message}")
+                }
             }
-            try {
-                // Insert your initial data here
-                // For example:
-                val user1 = User(
-                    profilePic = "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/profile_pic.png",
-                    backGroundPic = "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/profile_pic.png",
-                    firstName = "John",
-                    lastName = "Doe",
-                    isStudent = true,
-                    emailId = "john.doe@example.com",
-                    password = "password",
-                    graduationYear = 2023,
-                    coopYear = 2022,
-                    role = "Software Developer",
-                    about = "I'm a positive person. I love to travel and eat. Always available to chat.",
-                    domainId = domainId,
-                    isFeatured = true,
-                    resume = "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/project-1.pdf",
-                    coverLetter = "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/project-1.pdf",
-                    instagramId = "@test123",
-                    linkedInId = "@testlinkedin",
-                    facebookId = "@testfacebookid"
-                )
-                val userId = db.userDao().insert(user1).toInt()
-                val educationItem1 = EducationItem(
-                    userId = userId,
-                    school = "University of Example",
-                    degree = "Bachelor of Science in Computer Science",
-                    startDate = "2019-09-01",
-                    endDate = "2023-05-31"
-                )
-                val experienceItem1 = ExperienceItem(
-                    userId = userId,
-                    role = "Software Development Intern",
-                    company = "Tech Company XYZ",
-                    startDate = "2022-05-01",
-                    endDate = "2022-08-31",
-                    isCoop = true
-                )
-                db.educationItemDao().insert(educationItem1)
-                db.experienceItemDao().insert(experienceItem1)
-            } catch (e: Exception) {
-                // Handle the exception here
-                // For example, log the error or show a toast message
-                Log.e("Database", "Error inserting initial data: ${e.message}")
+            // Generate realistic user data
+            val userGenerator = RealisticUserGenerator()
+            val userDataList = userGenerator.generateRealisticUserData(10, domainIds)
+
+            // Insert your initial data here
+            // For example:
+            userDataList.forEach { userData ->
+                try {
+                    val userId = db.userDao().insert(userData.user).toInt()
+
+                    // Insert education and experience items
+                    userData.experienceItems.forEach { experienceItem ->
+                        experienceItem.userId = userId
+                        db.experienceItemDao().insert(experienceItem)
+                    }
+                    userData.educationItem.userId = userId
+                    db.educationItemDao().insert(userData.educationItem)
+                } catch (e: Exception) {
+                    // Handle the exception here
+                    // For example, log the error or show a toast message
+                    Log.e("Database", "Error inserting initial data: ${e.message}")
+                }
             }
         }
     }
 }
+
+class RealisticUserGenerator {
+    private val firstNameList = listOf(
+        "James", "John", "Robert", "Michael", "William",
+        "David", "Richard", "Joseph", "Charles", "Thomas"
+    )
+
+    private val lastNameList = listOf(
+        "Smith", "Johnson", "Williams", "Brown", "Jones",
+        "Garcia", "Miller", "Davis", "Rodriguez", "Martinez"
+    )
+
+    private val roleList = listOf(
+        "Software Developer", "Data Analyst", "Web Developer",
+        "Network Engineer", "UX Designer", "Product Manager"
+    )
+
+    private val aboutPrefixList = listOf(
+        "I'm a positive person.",
+        "I love to travel and eat.",
+        "Always available to chat.",
+        "Tech enthusiast.",
+        "Passionate about coding.",
+        "Explorer of new technologies."
+    )
+
+    private val aboutSuffixList = listOf(
+        "In my free time, I enjoy hiking and playing guitar.",
+        "I'm a coffee lover and a bookworm.",
+        "Big fan of outdoor activities and photography.",
+        "Proud pet parent of two cats.",
+        "Volunteer at local community events.",
+        "Avid gamer and movie buff."
+    )
+
+    fun generateRealisticUserData(
+        count: Int,
+        domainIds: List<Int>
+    ): List<UserData> {
+        val userDataList = mutableListOf<UserData>()
+        repeat(count) { index ->
+            val firstName = firstNameList.random()
+            val lastName = lastNameList.random()
+            val email = "${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com"
+            val role = roleList.random()
+            val about = generateDynamicAboutSection()
+            val domainId = domainIds.random()
+            val socialMediaId = "@${firstName.toLowerCase()}${lastName.toLowerCase()}"
+
+            val user = User(
+                profilePic = "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/profile_pic.png",
+                backGroundPic = "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/profile_pic.png",
+                firstName = firstName,
+                lastName = lastName,
+                isStudent = true,
+                emailId = email,
+                password = "password",
+                graduationYear = 2023,
+                coopYear = 2022,
+                role = role,
+                about = about,
+                domainId = domainId,
+                isFeatured = true,
+                resume = "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/project-1.pdf",
+                coverLetter = "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/project-1.pdf",
+                instagramId = "$socialMediaId.instagram",
+                linkedInId = "$socialMediaId.linkedin",
+                facebookId = "$socialMediaId.facebook"
+            )
+
+            val educationItem = EducationItem(
+                userId = 0, // Will be updated after user insertion
+                school = "University of Example",
+                degree = "Bachelor of Science in Computer Science",
+                startDate = "2019-09-01",
+                endDate = "2023-05-31"
+            )
+
+            val experienceItems = listOf(
+                ExperienceItem(
+                    userId = 0, // Will be updated after user insertion
+                    role = "$role Intern",
+                    company = "Tech Company XYZ",
+                    startDate = "2022-05-01",
+                    endDate = "2022-08-31",
+                    isCoop = true
+                ),
+                ExperienceItem(
+                    userId = 0, // Will be updated after user insertion
+                    role = "$role Intern",
+                    company = "Data Firm ABC",
+                    startDate = "2021-05-01",
+                    endDate = "2021-08-31",
+                    isCoop = false
+                )
+            )
+
+            userDataList.add(UserData(user, educationItem, experienceItems))
+        }
+        return userDataList
+    }
+
+    private fun generateDynamicAboutSection(): String {
+        val prefix = aboutPrefixList.random()
+        val suffix = aboutSuffixList.random()
+        return "$prefix $suffix"
+    }
+}
+
+data class UserData(
+    val user: User,
+    val educationItem: EducationItem,
+    val experienceItems: List<ExperienceItem>
+)

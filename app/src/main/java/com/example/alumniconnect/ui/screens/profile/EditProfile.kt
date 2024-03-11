@@ -4,8 +4,10 @@ import android.net.Uri
 import android.os.ParcelFileDescriptor
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +22,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,6 +34,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
@@ -83,7 +88,7 @@ fun EditProfile(
             screenTitle = "Edit $editType",
             canGoBack = true,
             onNavClick = { navController.popBackStack() },
-            showAction = true)
+        )
 
     },
         bottomBar = { BottomNavBar(navController = navController) }) { innerPadding ->
@@ -147,9 +152,9 @@ fun EditProfile(
                 for (item in uiState.experienceItems) {
                     Card(
                         modifier = modifier
-                            .padding(bottom = 20.dp)
-                            .shadow(8.dp, RoundedCornerShape(10.dp))
-                            .background(Color.LightGray, RoundedCornerShape(10.dp))
+//                            .padding(vertical = 20.dp)
+                            .clip(RoundedCornerShape(8.dp)),
+                        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
                     ) {
                         Column(modifier = modifier.padding(5.dp)) {
                             PrimaryOutlinedTextField(
@@ -181,8 +186,8 @@ fun EditProfile(
                                 }
                             )
                         }
-
-
+//                        Spacer(modifier = modifier.size(10.dp))
+                        Divider(thickness = 2.dp, modifier = modifier.padding(vertical = 20.dp))
                     }
                 }
             } else if (editType == "Education") {

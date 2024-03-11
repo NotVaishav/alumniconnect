@@ -76,7 +76,6 @@ fun DomainsSection(
 
                 OutlinedIconButton(
                     onClick = {
-                        homeViewModel.getDomainInfo(item.id)
                         navController.navigate("${AlumniConnectNavDestinations.AlumniDirectory.route}/${item.id}")
                     },
                     modifier = modifier
