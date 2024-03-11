@@ -1,5 +1,6 @@
 package com.example.alumniconnect.ui.screens.profile
 
+import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Build
@@ -9,15 +10,77 @@ import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.alumniconnect.R
+import com.example.alumniconnect.data.DomainRepository
+import com.example.alumniconnect.data.EducationItem
+import com.example.alumniconnect.data.EducationItemRepository
+import com.example.alumniconnect.data.ExperienceItem
+import com.example.alumniconnect.data.ExperienceItemRepository
+import com.example.alumniconnect.data.User
+import com.example.alumniconnect.data.UsersRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class ProfileViewModel() : ViewModel() {
+class ProfileViewModel(
+    private val usersRepository: UsersRepository,
+    private val educationRepository: EducationItemRepository,
+    private val experienceRepository: ExperienceItemRepository,
+) : ViewModel() {
     private val _uiState = MutableStateFlow(ProfileUIState())
     val uiState: StateFlow<ProfileUIState> = _uiState.asStateFlow()
+
+
+    init {
+        viewModelScope.launch {
+            getUserProfile()
+            _uiState.collect { profileUIState ->
+                profileUIState.currentUser?.id?.let { userId ->
+                    getUserEducation(userId)
+                    getUserExperience(userId)
+                }
+            }
+        }
+    }
+
+    fun getUserProfile() {
+        viewModelScope.launch {
+            usersRepository.getAllUsersStream().collect { userList ->
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        currentUser = userList[0]
+                    )
+                }
+            }
+        }
+    }
+
+    fun getUserEducation(userId: Int) {
+        viewModelScope.launch {
+            educationRepository.getEducationForUser(userId).collect { educationList ->
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        educationItems = educationList
+                    )
+                }
+            }
+        }
+    }
+
+    fun getUserExperience(userId: Int) {
+        viewModelScope.launch {
+            experienceRepository.getExperienceForUser(userId).collect { experienceList ->
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        experienceItems = experienceList
+                    )
+                }
+            }
+        }
+    }
 
     fun setFieldValue(fieldType: String, fieldItem: FieldItem, fieldValue: String) {
         _uiState.update { currentState ->
@@ -117,34 +180,14 @@ data class ExperienceItem(
 
 
 data class ProfileUIState(
-    var experienceItems: List<ExperienceItem> = listOf(
-        ExperienceItem(
-            "Software Development Intern",
-            "Dash Hudson",
-            "May 2023",
-            endDate = "Dec 2024",
-            isCoop = true,
-        ),
-        ExperienceItem(
-            "Python Developer",
-            "Aptagrim",
-            "Aug 2021",
-            endDate = "Aug 2022",
-        )
-    ),
-    val educationItems: List<EducationItem> = listOf(
-        EducationItem(
-            "St. Francis Xavier University",
-            "Master's degree, Applied Computer Science",
-            "Sep 2022",
-            endDate = "May 2024"
-        )
-    ),
+    var currentUser: User? = null,
+    var experienceItems: List<ExperienceItem> = listOf(),
+    val educationItems: List<EducationItem> = listOf(),
     val id: Int = 0,
-    var isStudent: Boolean = true,
-    var firstName: String = "Vaishav",
-    var lastName: String = "Dhepe",
-    var role: String = "Software Developer",
+    var isStudent: Boolean = currentUser?.isStudent ?: false,
+    var firstName: String = currentUser?.firstName ?: "Vaishav",
+    var lastName: String = currentUser?.lastName ?: "Dhepe",
+    var role: String = currentUser?.role ?: "Software Developer",
 
     val fields: Map<String, List<FieldItem>> = mapOf(
         "Personal" to
@@ -152,13 +195,13 @@ data class ProfileUIState(
                     FieldItem(
                         fieldName = "Contact",
                         hidden = false,
-                        value = "(902)-318-6993",
+                        value = currentUser?.contactNumber ?: "(902)-318-6993",
                         icon = Icons.Filled.Phone
                     ),
                     FieldItem(
                         fieldName = "Email",
                         hidden = true,
-                        value = "vaishavtest@gmail.com",
+                        value = currentUser?.emailId ?: "test@test.com",
                         icon = Icons.Filled.Email
                     )
                 ),
@@ -166,19 +209,19 @@ data class ProfileUIState(
             FieldItem(
                 fieldName = "Instagram",
                 hidden = false,
-                value = "@notvaishav",
+                value = currentUser?.instagramId ?: "@testinsta",
                 icon = R.drawable.instagram
             ),
             FieldItem(
                 fieldName = "LinkedIn",
                 hidden = false,
-                value = "@vaishavdhepe",
+                value = currentUser?.linkedInId ?: "@testlinkedin",
                 icon = R.drawable.linkedin
             ),
             FieldItem(
                 fieldName = "Facebook",
                 hidden = false,
-                value = "@vaishav",
+                value = currentUser?.facebookId ?: "@testfacebook",
                 icon = R.drawable.facebook
             ),
         ),
@@ -226,5 +269,6 @@ data class ProfileUIState(
     var coopYear: Int? = null,
     var isFormValid: Boolean = true,
     var areCredentialsValid: Boolean = false,
-    var error: String = ""
-)
+    var error: String = "",
+
+    )

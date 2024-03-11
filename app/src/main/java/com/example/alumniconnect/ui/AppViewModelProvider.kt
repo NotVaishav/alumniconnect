@@ -24,7 +24,11 @@ object AppViewModelProvider {
             WelcomeViewModel()
         }
         initializer {
-            ProfileViewModel()
+            ProfileViewModel(
+                alumniConnectApplication().container.usersRepository,
+                alumniConnectApplication().container.educationItemRepository,
+                alumniConnectApplication().container.experienceItemRepository,
+            )
         }
         initializer {
             HomeViewModel(
