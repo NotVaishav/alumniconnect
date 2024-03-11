@@ -22,6 +22,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,17 +34,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.alumniconnect.R
+import com.example.alumniconnect.ui.AppViewModelProvider
 import com.example.alumniconnect.ui.navigation.AlumniConnectNavDestinations
 import com.example.alumniconnect.ui.theme.AlumniConnectTheme
 
-data class Profile(val name: String, val image: Int)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FeaturedProfile(modifier: Modifier = Modifier, navController: NavController) {
+fun FeaturedProfile(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    homeViewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
+) {
+    val uiState by homeViewModel.uiState.collectAsState()
     Column(
         modifier = modifier
             .padding(horizontal = 10.dp)
@@ -56,7 +65,7 @@ fun FeaturedProfile(modifier: Modifier = Modifier, navController: NavController)
         LazyRow(
             modifier = modifier.padding(horizontal = 10.dp)
         ) {
-            itemsIndexed(userList.filter { it.isFeatured }) { index, item ->
+            itemsIndexed(uiState.currentList.filter { it.isFeatured!! }) { index, item ->
                 Card(
                     shape = RoundedCornerShape(0.dp),
                     modifier = modifier
@@ -82,8 +91,9 @@ fun FeaturedProfile(modifier: Modifier = Modifier, navController: NavController)
                                     shape = RoundedCornerShape(10.dp)
                                 ),
                         ) {
-                            Image(
-                                painter = painterResource(id = item.profilePic),
+                            AsyncImage(
+                                model = item.profilePic,
+//                                painter = painterResource(id = item.profilePic),
                                 contentDescription = null,
                                 modifier = modifier.size(140.dp)
                             )

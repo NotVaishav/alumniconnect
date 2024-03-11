@@ -68,6 +68,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -84,7 +85,6 @@ import com.example.alumniconnect.ui.AppViewModelProvider
 import com.example.alumniconnect.ui.navigation.AlumniConnectNavDestinations
 import com.example.alumniconnect.ui.screens.home.AlumniProfile
 import com.example.alumniconnect.ui.screens.home.BottomNavBar
-import com.example.alumniconnect.ui.screens.home.Profile
 import com.example.alumniconnect.ui.screens.home.TopBar
 import com.example.alumniconnect.ui.theme.AlumniConnectTheme
 
@@ -95,6 +95,7 @@ fun ProfileScreen(
 ) {
     val uiState by profileViewModel.uiState.collectAsState()
     val fontGrey = colorResource(id = R.color.secondary_grey)
+    val isTablet = LocalConfiguration.current.screenWidthDp >= 600
 
     Scaffold(
         topBar = { TopBar(screenTitle = "Profile") },
@@ -104,7 +105,7 @@ fun ProfileScreen(
             modifier = modifier
                 .padding(innerPadding)
         ) {
-            Box(modifier = modifier.height(150.dp)) {
+            Box(modifier = modifier.height(if (isTablet) 240.dp else 150.dp)) {
                 Image(
                     painter = painterResource(id = R.drawable.profile_pic),
                     contentDescription = null,
@@ -191,7 +192,7 @@ fun OverlappingImageBox(
         ) {
             smallPlaceable.placeRelative(
                 x = (smallPlaceable.width / 2) - 100,
-                y = smallPlaceable.height + 400
+                y = smallPlaceable.height + (constraints.maxHeight / 5) - 50
             )
         }
     }

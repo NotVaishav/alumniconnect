@@ -1,11 +1,15 @@
 package com.example.alumniconnect.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.example.alumniconnect.data.UserDataStore
 import com.example.alumniconnect.ui.AppViewModelProvider
 import com.example.alumniconnect.ui.screens.home.homeGraph
 import com.example.alumniconnect.ui.screens.login.LoginScreen
@@ -41,9 +45,16 @@ fun AlumniConnectNavGraph(
     signupViewModel: SignupViewModel = viewModel(factory = AppViewModelProvider.Factory),
     profileViewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
+
+    val signupUiState by signupViewModel.uiState.collectAsState()
+
     NavHost(
         navController = navController,
-        startDestination = AlumniConnectNavDestinations.Home.title
+        startDestination = if (signupUiState.isUserLoggedIn) {
+            AlumniConnectNavDestinations.Home.title
+        } else {
+            AlumniConnectNavDestinations.Welcome.title
+        }
     ) {
         composable(route = AlumniConnectNavDestinations.Welcome.title) {
             WelcomeScreen(

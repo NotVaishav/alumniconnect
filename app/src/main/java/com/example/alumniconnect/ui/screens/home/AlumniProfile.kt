@@ -1,5 +1,6 @@
 package com.example.alumniconnect.ui.screens.home
 
+import android.util.Log
 import android.widget.ScrollView
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
@@ -37,6 +38,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -59,23 +63,37 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.alumniconnect.R
+import com.example.alumniconnect.data.User
+import com.example.alumniconnect.ui.AppViewModelProvider
 import com.example.alumniconnect.ui.common.PrimaryButton
 import com.example.alumniconnect.ui.navigation.AlumniConnectNavDestinations
 import com.example.alumniconnect.ui.theme.AlumniConnectTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun AlumniProfile(
     navController: NavController,
-    userProfile: UserProfile,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    userId: Int,
+    homeViewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
-    var fontGrey = colorResource(id = R.color.secondary_grey)
+    val fontGrey = colorResource(id = R.color.secondary_grey)
+
     val state = rememberScrollState()
     val showProfile = state.value == 0
+    val uiState by homeViewModel.uiState.collectAsState()
+    val scope = rememberCoroutineScope()
+    val userProfile = uiState.currentList.find { it.id == userId }
     val animatedPaddingValues = animateDpAsState(if (state.value > 0) 60.dp else 140.dp, label = "")
+    scope.launch {
+        homeViewModel.getUserEducation(userId)
+        homeViewModel.getUserExperience(userId)
+    }
 
     Scaffold(
         bottomBar = { BottomNavBar(navController = navController) }) { innerPadding ->
@@ -97,8 +115,8 @@ fun AlumniProfile(
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
                         }) {
-                    Image(
-                        painter = painterResource(id = userProfile.backGroundPic),
+                    AsyncImage(
+                        model = userProfile?.backGroundPic,
                         contentDescription = null,
                         modifier = modifier
                             .fillMaxSize()
@@ -139,22 +157,28 @@ fun AlumniProfile(
                             .verticalScroll(state)
                     ) {
                         Spacer(modifier = modifier.size(50.dp))
-                        ProfileSection(fontColor = fontGrey, userProfile = userProfile)
-                        SocialsRow(userProfile = userProfile)
+                        if (userProfile != null) {
+                            ProfileSection(fontColor = fontGrey, userProfile = userProfile)
+                        }
+                        if (userProfile != null) {
+                            SocialsRow(userProfile = userProfile)
+                        }
                         Spacer(modifier = modifier.size(10.dp))
                         HitsRow(fontColor = fontGrey)
-                        ButtonsRow(navController = navController, userProfile = userProfile)
-                        CoopExperienceSection(fontColor = fontGrey, userProfile = userProfile)
+                        if (userProfile != null) {
+                            ButtonsRow(navController = navController, userProfile = userProfile)
+                        }
+                        CoopExperienceSection(fontColor = fontGrey, uiState = uiState)
                         Divider(
                             thickness = 1.dp,
                             modifier = modifier.padding(horizontal = 5.dp, vertical = 5.dp)
                         )
-                        ExperienceSection(fontColor = fontGrey, userProfile = userProfile)
+                        ExperienceSection(fontColor = fontGrey, uiState = uiState)
                         Divider(
                             thickness = 1.dp,
                             modifier = modifier.padding(horizontal = 5.dp, vertical = 5.dp)
                         )
-                        EducationSection(fontColor = fontGrey, userProfile = userProfile)
+                        EducationSection(fontColor = fontGrey, uiState = uiState)
                     }
                 }
                 androidx.compose.animation.AnimatedVisibility(
@@ -178,8 +202,8 @@ fun AlumniProfile(
                                     shape = CircleShape
                                 )
                         ) {
-                            Image(
-                                painter = painterResource(id = userProfile.profilePic),
+                            AsyncImage(
+                                model = userProfile?.profilePic,
                                 contentDescription = null,
                                 modifier = modifier
                                     .fillMaxSize()
@@ -228,19 +252,19 @@ fun OverlappingImageBox(
 
 
 @Composable
-fun ProfileSection(modifier: Modifier = Modifier, fontColor: Color, userProfile: UserProfile) {
+fun ProfileSection(modifier: Modifier = Modifier, fontColor: Color, userProfile: User) {
     Text(
         text = userProfile.firstName + " " + userProfile.lastName,
         style = androidx.compose.material3.MaterialTheme.typography.headlineMedium
     )
     Text(
-        text = userProfile.role,
+        text = userProfile.role!!,
         color = fontColor,
         modifier = modifier.padding(vertical = 1.dp)
     )
     Spacer(modifier = modifier.size(10.dp))
     Text(
-        text = userProfile.about,
+        text = userProfile.about!!,
         textAlign = TextAlign.Center,
         modifier = modifier.padding(10.dp)
     )
@@ -248,7 +272,7 @@ fun ProfileSection(modifier: Modifier = Modifier, fontColor: Color, userProfile:
 
 
 @Composable
-fun SocialsRow(modifier: Modifier = Modifier, userProfile: UserProfile) {
+fun SocialsRow(modifier: Modifier = Modifier, userProfile: User) {
     Row(modifier = modifier) {
         Box(modifier = modifier.padding(horizontal = 10.dp)) {
             IconButton(onClick = {}) {
@@ -376,7 +400,7 @@ fun HitsRow(modifier: Modifier = Modifier, fontColor: Color) {
 @Composable
 fun ButtonsRow(
     modifier: Modifier = Modifier,
-    userProfile: UserProfile,
+    userProfile: User,
     navController: NavController
 ) {
     Row(modifier = modifier.padding(vertical = 5.dp)) {
@@ -400,7 +424,7 @@ fun ButtonsRow(
 fun CoopExperienceSection(
     modifier: Modifier = Modifier,
     fontColor: Color,
-    userProfile: UserProfile
+    uiState: HomeUiState,
 ) {
     Column(
         horizontalAlignment = Alignment.Start,
@@ -430,7 +454,9 @@ fun CoopExperienceSection(
                     modifier = modifier.size(40.dp)
                 )
             }
-            for (each in userProfile.experienceInformation.filter { it.isCoop }) {
+            Log.d("USER EXPERIENCE", uiState.userExperience.toString())
+            for (each in uiState.userExperience.filter { it.isCoop }) {
+
                 Column(
                     modifier = modifier
                         .padding(start = 15.dp),
@@ -471,7 +497,7 @@ fun CoopExperienceSection(
 
 
 @Composable
-fun ExperienceSection(modifier: Modifier = Modifier, fontColor: Color, userProfile: UserProfile) {
+fun ExperienceSection(modifier: Modifier = Modifier, fontColor: Color, uiState: HomeUiState) {
     Column(
         horizontalAlignment = Alignment.Start,
         modifier = modifier
@@ -497,7 +523,7 @@ fun ExperienceSection(modifier: Modifier = Modifier, fontColor: Color, userProfi
                     modifier = modifier.size(40.dp)
                 )
             }
-            for (each in userProfile.experienceInformation.filter { !it.isCoop }) {
+            for (each in uiState.userExperience.filter { !it.isCoop }) {
                 Column(
                     modifier = modifier
                         .padding(start = 15.dp),
@@ -527,7 +553,7 @@ fun ExperienceSection(modifier: Modifier = Modifier, fontColor: Color, userProfi
 
 
 @Composable
-fun EducationSection(modifier: Modifier = Modifier, fontColor: Color, userProfile: UserProfile) {
+fun EducationSection(modifier: Modifier = Modifier, fontColor: Color, uiState: HomeUiState) {
     Column(
         horizontalAlignment = Alignment.Start,
         modifier = modifier
@@ -550,7 +576,8 @@ fun EducationSection(modifier: Modifier = Modifier, fontColor: Color, userProfil
                 contentDescription = null,
                 modifier = modifier.size(50.dp)
             )
-            for (each in userProfile.educationInformation) {
+            Log.d("THIS EDUCATION", uiState.userEducation.toString())
+            for (each in uiState.userEducation) {
                 Column(
                     modifier = modifier
                         .padding(start = 15.dp),
@@ -577,11 +604,3 @@ fun EducationSection(modifier: Modifier = Modifier, fontColor: Color, userProfil
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun AlumniProfilePreview() {
-    val navController = rememberNavController()
-    AlumniConnectTheme {
-        AlumniProfile(navController = navController, userProfile = userList[0])
-    }
-}

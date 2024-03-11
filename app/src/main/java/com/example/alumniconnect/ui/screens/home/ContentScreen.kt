@@ -12,12 +12,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.alumniconnect.R
+import com.example.alumniconnect.ui.AppViewModelProvider
 import com.rizzi.bouquet.HorizontalPDFReader
 import com.rizzi.bouquet.ResourceType
 import com.rizzi.bouquet.rememberHorizontalPdfReaderState
@@ -25,17 +29,20 @@ import com.rizzi.bouquet.rememberHorizontalPdfReaderState
 @Composable
 fun ContentScreen(
     modifier: Modifier = Modifier,
-    userProfile: UserProfile,
     isResume: Boolean = false,
-    navController: NavController
+    userId: Int,
+    navController: NavController,
+    homeViewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
+    val uiState by homeViewModel.uiState.collectAsState()
+    val userProfile = uiState.currentList.find { it.id == userId }
     val file = if (isResume) {
-        userProfile.resume
+        userProfile?.resume
     } else {
-        userProfile.coverLetter
+        userProfile?.coverLetter
     }
     val pdfState = rememberHorizontalPdfReaderState(
-        resource = ResourceType.Asset(file!!),
+        resource = ResourceType.Remote(file!!),
         isZoomEnable = true
     )
     Scaffold(topBar = {

@@ -34,6 +34,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,20 +48,27 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.alumniconnect.R
+import com.example.alumniconnect.data.User
 import com.example.alumniconnect.ui.AppViewModelProvider
 import com.example.alumniconnect.ui.navigation.AlumniConnectNavDestinations
 import com.example.alumniconnect.ui.screens.profile.ProfileViewModel
 import com.example.alumniconnect.ui.theme.AlumniConnectTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun AlumniDirectoryScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    domainId: String,
+    domainId: Int,
     homeViewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val uiState by homeViewModel.uiState.collectAsState()
+    val scope = rememberCoroutineScope()
+    scope.launch {
+        homeViewModel.getDomainInfo(domainId)
+    }
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -86,7 +94,12 @@ fun AlumniDirectoryScreen(
                 navController = navController
             )
             Spacer(modifier = modifier.size(10.dp))
-            AlumniList(navController = navController, uiState = uiState, domainId = domainId)
+            AlumniList(
+                navController = navController,
+                uiState = uiState,
+                domainId = domainId,
+                homeViewModel = homeViewModel
+            )
         }
     }
 }
@@ -96,19 +109,20 @@ fun AlumniDirectoryScreen(
 @Composable
 fun AppSearchBar(
     modifier: Modifier = Modifier,
-    domainId: String,
+    domainId: Int,
     homeViewModel: HomeViewModel,
     uiState: HomeUiState,
     navController: NavController
 ) {
     val placeHolderGrey = colorResource(id = R.color.secondary_grey)
+    val domainName = uiState.currentDomain
     SearchBar(
         query = uiState.searchText,
         onQueryChange = { homeViewModel.onSearchTextChange(it) },
         onSearch = {},
         active = uiState.isSearching,
         onActiveChange = { homeViewModel.onToggleSearch() },
-        placeholder = { Text(text = "Search ${domainId.lowercase()} alumni") },
+        placeholder = { Text(text = "Search ${domainName.lowercase()} alumni") },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Filled.Search,
@@ -132,10 +146,17 @@ fun AppSearchBar(
         ),
     ) {
         LazyColumn() {
-            itemsIndexed(uiState.currentList.filter { it.domain == domainId }) { index, item ->
+            itemsIndexed(uiState.currentList.filter { it.domainId == domainId }) { index, item ->
+                val scope = rememberCoroutineScope()
                 AlumniTile(
                     alumniProfile = item,
-                    onProfileClick = { navController.navigate("${AlumniConnectNavDestinations.AlumniProfile.route}/${item.id}") })
+                    onProfileClick = {
+                        scope.launch {
+                            homeViewModel.getUserEducation(item.id)
+                            homeViewModel.getUserExperience(item.id)
+                            navController.navigate("${AlumniConnectNavDestinations.AlumniProfile.route}/${item.id}")
+                        }
+                    })
             }
         }
     }
@@ -147,13 +168,22 @@ fun AlumniList(
     modifier: Modifier = Modifier,
     navController: NavController,
     uiState: HomeUiState,
-    domainId: String
+    homeViewModel: HomeViewModel,
+    domainId: Int
 ) {
     LazyColumn() {
-        itemsIndexed(uiState.currentList.filter { it.domain == domainId }) { index, item ->
+        itemsIndexed(uiState.currentList.filter { it.domainId == domainId }) { index, item ->
+            val scope = rememberCoroutineScope()
             AlumniTile(
                 alumniProfile = item,
-                onProfileClick = { navController.navigate("${AlumniConnectNavDestinations.AlumniProfile.route}/${item.id}") })
+                onProfileClick = {
+                    scope.launch {
+                        homeViewModel.getUserEducation(item.id)
+                        homeViewModel.getUserExperience(item.id)
+                        navController.navigate("${AlumniConnectNavDestinations.AlumniProfile.route}/${item.id}")
+                    }
+
+                })
         }
     }
 }
@@ -162,7 +192,7 @@ fun AlumniList(
 @Composable
 fun AlumniTile(
     modifier: Modifier = Modifier,
-    alumniProfile: UserProfile,
+    alumniProfile: User,
     onProfileClick: () -> Unit = {}
 ) {
     val fontGrey = colorResource(id = R.color.secondary_grey)
@@ -173,8 +203,8 @@ fun AlumniTile(
             .padding(horizontal = 10.dp, vertical = 10.dp)
             .clickable { onProfileClick() }
     ) {
-        Image(
-            painter = painterResource(id = alumniProfile.profilePic),
+        AsyncImage(
+            model = alumniProfile.profilePic,
             contentDescription = null,
             modifier = modifier
                 .size(70.dp)
@@ -194,7 +224,7 @@ fun AlumniTile(
                 modifier = modifier.padding(top = 10.dp)
             )
             Text(
-                text = alumniProfile.role,
+                text = alumniProfile.role!!,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Normal,
                 color = fontGrey
@@ -208,6 +238,6 @@ fun AlumniTile(
 fun AlumniDirectoryPreview() {
     val navController = rememberNavController()
     AlumniConnectTheme {
-        AlumniDirectoryScreen(navController = navController, domainId = "Engineering")
+        AlumniDirectoryScreen(navController = navController, domainId = 1)
     }
 }
