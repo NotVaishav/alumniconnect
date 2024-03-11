@@ -49,6 +49,7 @@ fun NavGraphBuilder.signupGraph(
                 onBackBtnClick = {
                     navController.popBackStack()
                 },
+                navController = navController
             )
         }
     }

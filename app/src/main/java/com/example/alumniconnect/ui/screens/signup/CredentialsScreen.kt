@@ -34,12 +34,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.alumniconnect.R
 import com.example.alumniconnect.ui.AppViewModelProvider
 import com.example.alumniconnect.ui.common.LoadingButton
 import com.example.alumniconnect.ui.common.PrimaryButton
 import com.example.alumniconnect.ui.common.PrimaryOutlinedTextField
 import com.example.alumniconnect.ui.common.WelcomeTopBar
+import com.example.alumniconnect.ui.navigation.AlumniConnectNavDestinations
 import com.example.alumniconnect.ui.theme.AlumniConnectTheme
 import kotlinx.coroutines.launch
 
@@ -47,7 +50,8 @@ import kotlinx.coroutines.launch
 fun CredentialsScreen(
     modifier: Modifier = Modifier,
     viewModel: SignupViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    onBackBtnClick: () -> Unit
+    onBackBtnClick: () -> Unit,
+    navController: NavController
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
@@ -80,7 +84,7 @@ fun CredentialsScreen(
         )
         Text(
             text = "Let's finalize your account", style = MaterialTheme.typography.labelLarge,
-            color = Color(R.color.text_grey),
+            color = Color(context.resources.getColor(R.color.text_grey)),
         )
         Spacer(modifier = modifier.size(20.dp))
         PrimaryOutlinedTextField(
@@ -98,7 +102,12 @@ fun CredentialsScreen(
         )
         Spacer(modifier = modifier.size(10.dp))
         PrimaryButton(
-            onBtnClick = { coroutineScope.launch { viewModel.saveUser() } },
+            onBtnClick = {
+                coroutineScope.launch {
+                    viewModel.saveUser()
+                    navController.navigate(AlumniConnectNavDestinations.Welcome.title)
+                }
+            },
             btnText = R.string.begin
         )
         if (uiState.error == "success") {
@@ -113,9 +122,11 @@ fun CredentialsScreen(
 @Preview(showBackground = true)
 @Composable
 fun CredentialsPreview() {
+    val navController = rememberNavController()
     AlumniConnectTheme {
         CredentialsScreen(
-            onBackBtnClick = {}
+            onBackBtnClick = {},
+            navController = navController
         )
     }
 }

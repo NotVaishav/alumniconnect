@@ -5,18 +5,42 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.alumniconnect.data.User
+import com.example.alumniconnect.data.UserDataStore
 import com.example.alumniconnect.data.UsersRepository
 import com.example.alumniconnect.ui.navigation.AlumniConnectNavDestinations
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class SignupViewModel(private val usersRepository: UsersRepository) : ViewModel() {
+class SignupViewModel(
+    private val usersRepository: UsersRepository,
+    private val userDataStore: UserDataStore
+) : ViewModel() {
     private val _uiState = MutableStateFlow(SignupUiState())
-    val uiState: StateFlow<SignupUiState> = _uiState.asStateFlow()
+
+    private val isLoggedInFlow = userDataStore.getUserStatus.map { isUserLoggedIn ->
+        isUserLoggedIn
+    }
+
+    val uiState: StateFlow<SignupUiState> =
+        combine(_uiState, isLoggedInFlow) { uiState, isLoggedIn ->
+            uiState.copy(isUserLoggedIn = isLoggedIn)
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = _uiState.value
+        )
+
+    private fun saveUserLoggedInInformation() {
+        viewModelScope.launch { userDataStore.saveUserStatus(false) }
+    }
 
     fun updateUserState(isStudent: Boolean) {
         _uiState.update { currentState ->
@@ -88,12 +112,15 @@ class SignupViewModel(private val usersRepository: UsersRepository) : ViewModel(
                 password = uiState.value.password
             )
         )
-        result.onSuccess {
-            _uiState.update { currentState -> currentState.copy(error = "success") }
-        }.onFailure { e ->
-            _uiState.update { currentState -> currentState.copy(error = "$e") }
-            Log.d("SQLLITE", "$e")
-        }
+        saveUserLoggedInInformation()
+        _uiState.update { currentState -> currentState.copy(error = "success") }
+//        result.onSuccess {
+//            saveUserLoggedInInformation()
+//            _uiState.update { currentState -> currentState.copy(error = "success") }
+//        }.onFailure { e ->
+//            _uiState.update { currentState -> currentState.copy(error = "$e") }
+//            Log.d("SQLLITE", "$e")
+//        }
 
     }
 
@@ -106,6 +133,7 @@ class SignupViewModel(private val usersRepository: UsersRepository) : ViewModel(
 }
 
 data class SignupUiState(
+    var isUserLoggedIn: Boolean = false,
     val id: Int = 0,
     var isStudent: Boolean = true,
     var firstName: String = "Vaishav",

@@ -27,7 +27,7 @@ fun NavGraphBuilder.homeGraph(navController: NavController) {
         composable(route = AlumniConnectNavDestinations.AlumniDirectory.title) { backStackEntry ->
             val domainId = backStackEntry.arguments?.getString("domainId")
             if (domainId != null) {
-                AlumniDirectoryScreen(navController = navController, domainId = domainId)
+                AlumniDirectoryScreen(navController = navController, domainId = domainId.toInt())
             }
         }
         composable(route = AlumniConnectNavDestinations.AlumniProfile.title) { backStackEntry ->
@@ -35,7 +35,7 @@ fun NavGraphBuilder.homeGraph(navController: NavController) {
             if (userId != null) {
                 AlumniProfile(
                     navController = navController,
-                    userProfile = userList.find { it.id == userId.toInt() }!!,
+                    userId = userId.toInt()
                 )
             }
         }
@@ -46,7 +46,7 @@ fun NavGraphBuilder.homeGraph(navController: NavController) {
             if (userId != null) {
                 ContentScreen(
                     navController = navController,
-                    userProfile = userList.find { it.id == userId.toInt() }!!,
+                    userId = userId.toInt(),
                     isResume = isResume
                 )
             }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,7 +43,7 @@ import com.example.alumniconnect.ui.theme.AlumniConnectTheme
 fun AlumniHomeScreen(
     navController: NavController, modifier: Modifier = Modifier,
 
-) {
+    ) {
     Scaffold(
         topBar = { TopBar(screenTitle = "Home") },
         bottomBar = { BottomNavBar(navController = navController) }) { innerPadding ->
@@ -61,7 +62,9 @@ fun TopBar(
     modifier: Modifier = Modifier,
     screenTitle: String,
     onNavClick: () -> Unit = {},
-    canGoBack: Boolean = false
+    canGoBack: Boolean = false,
+    showAction: Boolean = false,
+    onCheckAction: () -> Unit = {}
 ) {
     CenterAlignedTopAppBar(title = {
         Text(
@@ -71,6 +74,14 @@ fun TopBar(
         )
 
     }, modifier = modifier.padding(5.dp),
+        actions = {
+            if (showAction) {
+                IconButton(onClick = onCheckAction) {
+                    Icon(imageVector = Icons.Filled.Check, contentDescription = null)
+                }
+            }
+
+        },
         navigationIcon = {
             if (canGoBack) {
                 IconButton(onClick = onNavClick) {

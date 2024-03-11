@@ -58,22 +58,27 @@ fun DomainsSection(
         LazyColumn(
             modifier = modifier.padding(10.dp)
         ) {
-            itemsIndexed(domainsList) { index, item ->
+            itemsIndexed(uiState.domainsList) { index, item ->
                 val alumniText =
-                    when (val alumniCount = homeViewModel.getAlumniCount(domain = item.name)) {
+                    when (val alumniCount = homeViewModel.getAlumniCount(domainId = item.id)) {
                         0 -> {
                             "No alumnus"
                         }
+
                         1 -> {
                             "1 alumni"
                         }
+
                         else -> {
                             "${alumniCount - 1}+ alumnus"
                         }
                     }
 
                 OutlinedIconButton(
-                    onClick = { navController.navigate("${AlumniConnectNavDestinations.AlumniDirectory.route}/${item.name}") },
+                    onClick = {
+                        homeViewModel.getDomainInfo(item.id)
+                        navController.navigate("${AlumniConnectNavDestinations.AlumniDirectory.route}/${item.id}")
+                    },
                     modifier = modifier
                         .fillMaxSize()
                         .height(90.dp)

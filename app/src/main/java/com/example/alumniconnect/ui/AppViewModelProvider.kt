@@ -15,7 +15,10 @@ import com.example.alumniconnect.ui.screens.welcome.WelcomeViewModel
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
-            SignupViewModel(alumniConnectApplication().container.usersRepository)
+            SignupViewModel(
+                alumniConnectApplication().container.usersRepository,
+                alumniConnectApplication().userStoreData
+            )
         }
         initializer {
             WelcomeViewModel()
@@ -24,7 +27,12 @@ object AppViewModelProvider {
             ProfileViewModel()
         }
         initializer {
-            HomeViewModel()
+            HomeViewModel(
+                alumniConnectApplication().container.usersRepository,
+                alumniConnectApplication().container.domainRepository,
+                alumniConnectApplication().container.educationItemRepository,
+                alumniConnectApplication().container.experienceItemRepository,
+            )
         }
     }
 }

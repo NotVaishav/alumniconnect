@@ -22,7 +22,7 @@ class OfflineUsersRepository(private val userDao: UserDao) : UsersRepository {
 
     override fun getUserStream(id: Int): Flow<User?> = userDao.getItem(id)
 
-    override suspend fun insertUser(user: User) : Result<Unit> {
+    override suspend fun insertUser(user: User): Result<Unit> {
         return try {
             userDao.insert(user)
             Result.success(Unit)
@@ -36,4 +36,51 @@ class OfflineUsersRepository(private val userDao: UserDao) : UsersRepository {
     override suspend fun deleteUser(user: User) = userDao.delete(user)
 
     override suspend fun updateUser(user: User) = userDao.update(user)
+}
+
+class EducationItemRepository(private val educationItemDao: EducationItemDao) {
+    val allEducationItems: Flow<List<EducationItem>> = educationItemDao.getAllEducationItems()
+
+    suspend fun insert(educationItem: EducationItem): Result<Unit> {
+        return try {
+            educationItemDao.insert(educationItem)
+            Result.success(Unit)
+        } catch (e: SQLiteConstraintException) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun updateEducationItem(educationItem: EducationItem) =
+        educationItemDao.update(educationItem)
+
+    suspend fun getEducationForUser(userId: Int): Flow<List<EducationItem>> =
+        educationItemDao.getEducationForUser(userId)
+
+    // Add other functions as needed
+}
+
+class ExperienceItemRepository(private val experienceItemDao: ExperienceItemDao) {
+    val allExperienceItems: Flow<List<ExperienceItem>> = experienceItemDao.getAllExperienceItems()
+
+    suspend fun insert(experienceItem: ExperienceItem): Result<Unit> {
+        return try {
+            experienceItemDao.insert(experienceItem)
+            Result.success(Unit)
+        } catch (e: SQLiteConstraintException) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun updateExperienceItem(experienceItem: ExperienceItem) =
+        experienceItemDao.update(experienceItem)
+
+    suspend fun getExperienceForUser(id: Int): Flow<List<ExperienceItem>> =
+        experienceItemDao.getExperienceForUser(id)
+
+    // Add other functions as needed
+}
+
+
+class DomainRepository(private val domainDao: DomainDao) {
+    fun getAllDomains(): Flow<List<Domain>> = domainDao.getAllDomains()
 }

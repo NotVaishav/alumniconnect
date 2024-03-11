@@ -82,7 +82,8 @@ fun EditProfile(
         TopBar(
             screenTitle = "Edit $editType",
             canGoBack = true,
-            onNavClick = { navController.popBackStack() })
+            onNavClick = { navController.popBackStack() },
+            showAction = true)
 
     },
         bottomBar = { BottomNavBar(navController = navController) }) { innerPadding ->
@@ -118,7 +119,6 @@ fun EditProfile(
                     btnText = R.string.edit_resume
                 )
             } else if (editType == "Cover Letter") {
-
                 Spacer(modifier = modifier.size(20.dp))
                 HorizontalPDFReader(
                     state = pdfState,

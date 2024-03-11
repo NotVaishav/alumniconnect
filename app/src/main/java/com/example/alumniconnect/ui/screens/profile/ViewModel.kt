@@ -32,7 +32,6 @@ class ProfileViewModel() : ViewModel() {
             updatedFields[fieldType] = updatedFieldList.orEmpty()
             currentState.copy(fields = updatedFields)
         }
-
     }
 
     fun setExperienceFieldValue(
@@ -118,6 +117,29 @@ data class ExperienceItem(
 
 
 data class ProfileUIState(
+    var experienceItems: List<ExperienceItem> = listOf(
+        ExperienceItem(
+            "Software Development Intern",
+            "Dash Hudson",
+            "May 2023",
+            endDate = "Dec 2024",
+            isCoop = true,
+        ),
+        ExperienceItem(
+            "Python Developer",
+            "Aptagrim",
+            "Aug 2021",
+            endDate = "Aug 2022",
+        )
+    ),
+    val educationItems: List<EducationItem> = listOf(
+        EducationItem(
+            "St. Francis Xavier University",
+            "Master's degree, Applied Computer Science",
+            "Sep 2022",
+            endDate = "May 2024"
+        )
+    ),
     val id: Int = 0,
     var isStudent: Boolean = true,
     var firstName: String = "Vaishav",
@@ -164,7 +186,7 @@ data class ProfileUIState(
             FieldItem(
                 fieldName = "Experiences",
                 hidden = false,
-                value = "2+ experiences",
+                value = "${experienceItems.count()}+ experiences",
                 icon = Icons.Filled.Info
             )
         ),
@@ -172,7 +194,7 @@ data class ProfileUIState(
             FieldItem(
                 fieldName = "Education",
                 hidden = false,
-                value = "1+ Education Details",
+                value = "${educationItems.count()}+ Education Details",
                 icon = Icons.Filled.Info
             )
         ),
@@ -195,29 +217,6 @@ data class ProfileUIState(
 
     ),
 
-    var experienceItems: List<ExperienceItem> = listOf(
-        ExperienceItem(
-            "Software Development Intern",
-            "Dash Hudson",
-            "May 2023",
-            endDate = "Dec 2024",
-            isCoop = true,
-        ),
-        ExperienceItem(
-            "Python Developer",
-            "Aptagrim",
-            "Aug 2021",
-            endDate = "Aug 2022",
-        )
-    ),
-    val educationItems: List<EducationItem> = listOf(
-        EducationItem(
-            "St. Francis Xavier University",
-            "Master's degree, Applied Computer Science",
-            "Sep 2022",
-            endDate = "May 2024"
-        )
-    ),
 
     var school: String = "STFX",
     var program: String = "MACS",

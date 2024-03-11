@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import com.example.alumniconnect.ui.theme.AlumniConnectTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.alumniconnect.R
+import com.example.alumniconnect.data.UserDataStore
 import com.example.alumniconnect.ui.common.PrimaryButton
 
 
@@ -41,7 +42,7 @@ fun WelcomeScreen(
     modifier: Modifier = Modifier,
     viewModel: WelcomeViewModel = viewModel(),
     onStartBtnClick: () -> Unit,
-    onAccountBtnClick: (Int) -> Unit
+    onAccountBtnClick: (Int) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -49,7 +50,8 @@ fun WelcomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .background(color = Color(context.getColor(R.color.white))).padding(20.dp)
+            .background(color = Color(context.getColor(R.color.white)))
+            .padding(20.dp)
     ) {
         Spacer(modifier = modifier.height(100.dp))
         Divider(
