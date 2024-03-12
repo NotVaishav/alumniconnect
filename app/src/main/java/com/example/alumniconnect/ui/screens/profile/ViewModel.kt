@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
@@ -192,6 +193,24 @@ data class ProfileUIState(
     val fields: Map<String, List<FieldItem>> = mapOf(
         "Personal" to
                 listOf(
+                    FieldItem(
+                        fieldName = "First Name",
+                        hidden = false,
+                        value = currentUser?.firstName ?: "Vaishav",
+                        icon = Icons.Filled.AccountCircle
+                    ),
+                    FieldItem(
+                        fieldName = "Last Name",
+                        hidden = false,
+                        value = currentUser?.contactNumber ?: "Dhepe",
+                        icon = Icons.Filled.AccountCircle
+                    ),
+                    FieldItem(
+                        fieldName = "Role",
+                        hidden = false,
+                        value = currentUser?.role ?: "Software Developer",
+                        icon = Icons.Filled.Face
+                    ),
                     FieldItem(
                         fieldName = "Contact",
                         hidden = false,

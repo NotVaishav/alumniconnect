@@ -96,6 +96,10 @@ fun ProfileScreen(
     val uiState by profileViewModel.uiState.collectAsState()
     val fontGrey = colorResource(id = R.color.secondary_grey)
     val isTablet = LocalConfiguration.current.screenWidthDp >= 600
+    val personalFieldList = uiState.fields["Personal"]
+    val firstNameFieldValue = personalFieldList?.find { it.fieldName == "First Name" }?.value
+    val lastNameFieldValue = personalFieldList?.find { it.fieldName == "Last Name" }?.value
+    val roleFieldValue = personalFieldList?.find { it.fieldName == "Role" }?.value
 
     Scaffold(
         topBar = { TopBar(screenTitle = "Profile") },
@@ -126,11 +130,11 @@ fun ProfileScreen(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "Vaishav Dhepe",
+                        text = "$firstNameFieldValue $lastNameFieldValue",
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Medium
                     )
-                    Text(text = "Software Developer", color = fontGrey)
+                    Text(text = roleFieldValue?: "Software Test", color = fontGrey)
                 }
                 Spacer(modifier = modifier.size(10.dp))
                 for (item in uiState.fields) {

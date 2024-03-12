@@ -82,13 +82,13 @@ fun EditProfile(
     } else if (editType == "Cover Letter") {
         file = uiState.currentUser?.coverLetter
     }
-    if (editType == "Resume" || editType == "Cover Letter") {
-        pdfState = rememberHorizontalPdfReaderState(
+    pdfState = if (editType == "Resume" || editType == "Cover Letter") {
+        rememberHorizontalPdfReaderState(
             resource = ResourceType.Remote(file!!),
             isZoomEnable = true
         )
     } else {
-        pdfState = rememberHorizontalPdfReaderState(
+        rememberHorizontalPdfReaderState(
             resource = ResourceType.Asset(R.raw.madmidterm1),
             isZoomEnable = true
         )
