@@ -55,6 +55,7 @@ import com.example.alumniconnect.ui.screens.home.BottomNavBar
 import com.example.alumniconnect.ui.screens.home.TopBar
 import com.example.alumniconnect.ui.theme.AlumniConnectTheme
 import com.rizzi.bouquet.HorizontalPDFReader
+import com.rizzi.bouquet.HorizontalPdfReaderState
 import com.rizzi.bouquet.ResourceType
 import com.rizzi.bouquet.VerticalPDFReader
 import com.rizzi.bouquet.rememberHorizontalPdfReaderState
@@ -72,12 +73,27 @@ fun EditProfile(
     editType: String,
     profileViewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    var file: String? = null
+    var pdfState: HorizontalPdfReaderState? = null
     val uiState by profileViewModel.uiState.collectAsState()
     val currentForm = uiState.fields[editType]
-    val pdfState = rememberHorizontalPdfReaderState(
-        resource = ResourceType.Asset(R.raw.madmidterm1),
-        isZoomEnable = true
-    )
+    if (editType == "Resume") {
+        file = uiState.currentUser?.resume
+    } else if (editType == "Cover Letter") {
+        file = uiState.currentUser?.coverLetter
+    }
+    pdfState = if (editType == "Resume" || editType == "Cover Letter") {
+        rememberHorizontalPdfReaderState(
+            resource = ResourceType.Remote(file!!),
+            isZoomEnable = true
+        )
+    } else {
+        rememberHorizontalPdfReaderState(
+            resource = ResourceType.Asset(R.raw.madmidterm1),
+            isZoomEnable = true
+        )
+    }
+
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->

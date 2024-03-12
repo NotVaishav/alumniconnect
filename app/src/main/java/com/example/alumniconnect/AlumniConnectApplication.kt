@@ -162,7 +162,8 @@ class RealisticUserGenerator {
                 coverLetter = "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/project-1.pdf",
                 instagramId = "$socialMediaId.instagram",
                 linkedInId = "$socialMediaId.linkedin",
-                facebookId = "$socialMediaId.facebook"
+                facebookId = "$socialMediaId.facebook",
+                contactNumber = "(123)-456-7899"
             )
 
             val educationItem = EducationItem(

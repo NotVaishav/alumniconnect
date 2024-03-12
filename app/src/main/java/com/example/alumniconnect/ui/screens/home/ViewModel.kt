@@ -106,7 +106,6 @@ class HomeViewModel(
                         userEducation = educationList
                     )
                 }
-                Log.d("UPDATED VALUE", _uiState.value.userEducation.toString())
             }
         }
     }
@@ -214,13 +213,6 @@ data class HomeUiState(
     var domainsList: List<com.example.alumniconnect.data.Domain> = listOf(),
     var userExperience: List<com.example.alumniconnect.data.ExperienceItem> = listOf(),
     var userEducation: List<com.example.alumniconnect.data.EducationItem> = listOf(
-        com.example.alumniconnect.data.EducationItem(
-            id = 1,
-            userId = 16,
-            school = "Test",
-            degree = "qweqwe",
-            startDate = "123",
-            endDate = "123"
-        )
+
     ),
 )

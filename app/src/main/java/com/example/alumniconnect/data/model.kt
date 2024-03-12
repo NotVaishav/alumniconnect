@@ -37,6 +37,7 @@ data class User(
     val profilePic: String? = null,
     val backGroundPic: String? = null,
     val isStudent: Boolean = true,
+    val contactNumber: String? = null,
     val firstName: String? = null,
     val lastName: String? = null,
     val role: String? = null,
