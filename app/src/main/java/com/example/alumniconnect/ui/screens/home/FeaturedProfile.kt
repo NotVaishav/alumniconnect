@@ -1,5 +1,6 @@
 package com.example.alumniconnect.ui.screens.home
 
+import android.util.Log
 import android.widget.HorizontalScrollView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
