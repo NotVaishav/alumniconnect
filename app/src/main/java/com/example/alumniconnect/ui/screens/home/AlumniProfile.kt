@@ -1,5 +1,8 @@
 package com.example.alumniconnect.ui.screens.home
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.widget.ScrollView
 import androidx.compose.animation.AnimatedVisibility
@@ -51,6 +54,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -63,6 +67,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -74,6 +79,7 @@ import com.example.alumniconnect.ui.common.PrimaryButton
 import com.example.alumniconnect.ui.navigation.AlumniConnectNavDestinations
 import com.example.alumniconnect.ui.theme.AlumniConnectTheme
 import kotlinx.coroutines.launch
+import java.net.URL
 
 @Composable
 fun AlumniProfile(
@@ -164,7 +170,9 @@ fun AlumniProfile(
                             SocialsRow(userProfile = userProfile)
                         }
                         Spacer(modifier = modifier.size(10.dp))
-                        HitsRow(fontColor = fontGrey)
+                        if (userProfile != null) {
+                            HitsRow(fontColor = fontGrey, userProfile = userProfile)
+                        }
                         if (userProfile != null) {
                             ButtonsRow(navController = navController, userProfile = userProfile)
                         }
@@ -270,12 +278,25 @@ fun ProfileSection(modifier: Modifier = Modifier, fontColor: Color, userProfile:
     )
 }
 
+fun linkToWebpage(context: Context, url: String) {
+    val openURL = Intent(Intent.ACTION_VIEW)
+    openURL.data = Uri.parse(url)
+    startActivity(context, openURL, null)
+}
+
+fun Context.openUrlInBrowser(url: String) {
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+        data = Uri.parse(url)
+    }
+    startActivity(intent)
+}
 
 @Composable
 fun SocialsRow(modifier: Modifier = Modifier, userProfile: User) {
+    val context = LocalContext.current
     Row(modifier = modifier) {
         Box(modifier = modifier.padding(horizontal = 10.dp)) {
-            IconButton(onClick = {}) {
+            IconButton(onClick = { context.openUrlInBrowser("http://www.linkedin.com/${userProfile.linkedInId}") }) {
                 Icon(
                     painter = painterResource(id = R.drawable.linkedin),
                     contentDescription = null,
@@ -285,7 +306,7 @@ fun SocialsRow(modifier: Modifier = Modifier, userProfile: User) {
             }
         }
         Box(modifier = modifier.padding(horizontal = 10.dp)) {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { context.openUrlInBrowser("http://www.instagram.com/${userProfile.instagramId}") }) {
                 Icon(
                     painter = painterResource(id = R.drawable.instagram),
                     contentDescription = null,
@@ -296,7 +317,7 @@ fun SocialsRow(modifier: Modifier = Modifier, userProfile: User) {
             }
         }
         Box(modifier = modifier.padding(horizontal = 10.dp)) {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { context.openUrlInBrowser("http://www.facebook.com/${userProfile.facebookId}") }) {
                 Icon(
                     painter = painterResource(id = R.drawable.facebook),
                     contentDescription = null,
@@ -310,7 +331,7 @@ fun SocialsRow(modifier: Modifier = Modifier, userProfile: User) {
 
 
 @Composable
-fun HitsRow(modifier: Modifier = Modifier, fontColor: Color) {
+fun HitsRow(modifier: Modifier = Modifier, fontColor: Color, userProfile: User) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = "Total Hits",
@@ -332,7 +353,7 @@ fun HitsRow(modifier: Modifier = Modifier, fontColor: Color) {
                 .fillMaxSize()
         ) {
             Text(
-                text = "120",
+                text = userProfile.resumeHits.toString(),
                 style = androidx.compose.material3.MaterialTheme.typography.headlineSmall
             )
             Spacer(modifier = modifier.size(2.dp))
@@ -358,7 +379,7 @@ fun HitsRow(modifier: Modifier = Modifier, fontColor: Color) {
                 .fillMaxWidth()
         ) {
             Text(
-                text = "899",
+                text = userProfile.profileHits.toString(),
                 style = androidx.compose.material3.MaterialTheme.typography.headlineSmall
             )
             Text(
@@ -383,7 +404,7 @@ fun HitsRow(modifier: Modifier = Modifier, fontColor: Color) {
                 .fillMaxWidth()
         ) {
             Text(
-                text = "80",
+                text = userProfile.coverLetterHits.toString(),
                 style = androidx.compose.material3.MaterialTheme.typography.headlineSmall
             )
             Text(

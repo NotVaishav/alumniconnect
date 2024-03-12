@@ -21,6 +21,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 
 private const val IS_USER_LOGGED_IN_NAME = "isUserLoggedIn"
@@ -163,7 +164,10 @@ class RealisticUserGenerator {
                 instagramId = "$socialMediaId.instagram",
                 linkedInId = "$socialMediaId.linkedin",
                 facebookId = "$socialMediaId.facebook",
-                contactNumber = "(123)-456-7899"
+                contactNumber = "(123)-456-7899",
+                profileHits = Random.nextInt(200, 800),
+                resumeHits = Random.nextInt(50, 201),
+                coverLetterHits = Random.nextInt(50, 201)
             )
 
             val educationItem = EducationItem(
