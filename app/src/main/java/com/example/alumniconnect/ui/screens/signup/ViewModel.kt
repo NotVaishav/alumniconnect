@@ -105,13 +105,26 @@ class SignupViewModel(
 
     suspend fun saveUser() {
         _uiState.update { currentState -> currentState.copy(error = "") }
-        val result = usersRepository.insertUser(
-            User(
-                id = uiState.value.id,
-                emailId = uiState.value.emailId,
-                password = uiState.value.password
-            )
-        )
+//        val result = usersRepository.insertUser(
+//            User(
+//                profilePic = "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/profile_pic.png",
+//                backGroundPic = "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/profile_pic.png",
+//                id = uiState.value.id,
+//                emailId = uiState.value.emailId,
+//                password = uiState.value.password,
+//                role = "Student",
+//                about = "This is my about section",
+//                domainId = 2,
+//                isFeatured = true,
+//                resume = "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/project-1.pdf",
+//                coverLetter = "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/project-1.pdf",
+//                instagramId = "@test.instagram",
+//                linkedInId = "@test.linkedin",
+//                facebookId = "@test.facebook",
+//                contactNumber = "(123)-456-7899"
+//            )
+//        )
+
         saveUserLoggedInInformation()
         _uiState.update { currentState -> currentState.copy(error = "success") }
 //        result.onSuccess {

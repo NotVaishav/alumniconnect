@@ -15,7 +15,7 @@ class UserDataStore(private val dataStore: DataStore<Preferences>) {
     }
 
     val getUserStatus: Flow<Boolean> = dataStore.data.map { preferences ->
-        preferences[IS_USER_LOGGED_IN] ?: true
+        preferences[IS_USER_LOGGED_IN] ?: false
     }
 
     suspend fun saveUserStatus(currentState: Boolean) {
