@@ -124,89 +124,9 @@ class HomeViewModel(
 }
 
 
-data class UserProfile(
-    val id: Int,
-    val profilePic: Int,
-    val backGroundPic: Int,
-    val firstName: String,
-    val lastName: String,
-    val role: String,
-    val about: String,
-    val isStudent: Boolean = false,
-    val domain: String? = null,
-    val contactNumber: String? = null,
-    val isFeatured: Boolean = true,
-    val educationInformation: List<EducationItem> = listOf(),
-    val experienceInformation: List<ExperienceItem> = listOf(),
-    val resume: Int? = null,
-    val coverLetter: Int? = null,
-    val instagramId: String? = null,
-    val linkedInId: String? = null,
-    val facebookId: String? = null
-)
-
-data class Domain(val name: String, val image: Int)
-
-val userList = listOf(
-    UserProfile(
-        id = 1,
-        profilePic = R.drawable.profile_pic,
-        backGroundPic = R.drawable.profile_pic,
-        firstName = "John",
-        lastName = "Doe",
-        role = "Software Developer",
-        about = "I'm a positive person. I love to travel and eat. Always available to chat",
-        domain = "IT",
-        contactNumber = "(902)-318-6993",
-        isFeatured = true,
-        educationInformation = listOf(
-            EducationItem(
-                "St. Francis Xavier University",
-                "Master's degree, Applied Computer Science",
-                "Sep 2022",
-                endDate = "May 2024"
-            )
-        ),
-        experienceInformation = listOf(
-            ExperienceItem(
-                "Software Development Intern",
-                "Dash Hudson",
-                "May 2023",
-                endDate = "Dec 2024",
-                isCoop = true,
-            ),
-            ExperienceItem(
-                "Python Developer",
-                "Aptagrim",
-                "Aug 2021",
-                endDate = "Aug 2022",
-            )
-        ),
-        resume = R.raw.madmidterm1,
-        coverLetter = R.raw.madmidterm1,
-        instagramId = "@vaishav",
-        linkedInId = "@vaishavdhepe",
-        facebookId = "@notvaishav"
-    )
-)
-
-val domainsList = listOf(
-    Domain("Engineering", R.drawable.profile_pic),
-    Domain("Design", R.drawable.login_img),
-    Domain("Product Management", R.drawable.profile_pic),
-    Domain("Data Science", R.drawable.profile_pic),
-    Domain("Marketing", R.drawable.profile_pic),
-    Domain("Sales", R.drawable.profile_pic),
-    Domain("Finance", R.drawable.profile_pic),
-    Domain("Human Resources", R.drawable.login_img),
-    Domain("Legal", R.drawable.profile_pic),
-    Domain("IT", R.drawable.profile_pic),
-)
-
 data class HomeUiState(
     var isSearching: Boolean = false,
     var searchText: String = "",
-//    var currentList: List<UserProfile> = userList,
     var currentDomain: String = "",
     var currentUserIndex: Int = 0,
     var currentList: List<User> = listOf(),

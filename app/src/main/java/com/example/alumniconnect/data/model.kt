@@ -55,6 +55,9 @@ data class User(
     val instagramId: String? = null,
     val linkedInId: String? = null,
     val facebookId: String? = null,
+    val resumeHits: Int? = null,
+    val profileHits: Int? = null,
+    val coverLetterHits: Int? = null,
 )
 
 

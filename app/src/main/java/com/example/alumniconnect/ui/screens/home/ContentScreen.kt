@@ -36,13 +36,16 @@ fun ContentScreen(
 ) {
     val uiState by homeViewModel.uiState.collectAsState()
     val userProfile = uiState.currentList.find { it.id == userId }
-    val file = if (isResume) {
+    val file2 = if (isResume) {
         userProfile?.resume
     } else {
         userProfile?.coverLetter
     }
+
     val pdfState = rememberHorizontalPdfReaderState(
-        resource = ResourceType.Remote(file!!),
+        resource = ResourceType.Remote(
+            file2 ?: "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/project-1.pdf"
+        ),
         isZoomEnable = true
     )
     Scaffold(topBar = {
