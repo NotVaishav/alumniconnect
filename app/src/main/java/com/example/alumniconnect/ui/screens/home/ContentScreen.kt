@@ -37,11 +37,11 @@ fun ContentScreen(
     var file = "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/project-1.pdf"
     val uiState by homeViewModel.uiState.collectAsState()
     val userProfile = uiState.currentList.find { it.id == userId }
-    file = if (isResume) ({
-        userProfile?.resume
-    }).toString() else ({
-        userProfile?.coverLetter
-    }).toString()
+//    file = if (isResume) ({
+//        userProfile?.resume
+//    }).toString() else ({
+//        userProfile?.coverLetter
+//    }).toString()
     val pdfState = rememberHorizontalPdfReaderState(
         resource = ResourceType.Remote(file),
         isZoomEnable = true
