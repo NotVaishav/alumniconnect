@@ -25,12 +25,21 @@ fun NavGraphBuilder.signupGraph(
                     navController.navigate(AlumniConnectNavDestinations.Welcome.title)
                 },
                 onStudentBtnClick = {
+                    signupViewModel.updateUserState(isStudent = true)
                     navController.navigate(
                         AlumniConnectNavDestinations.Student.title
                     )
-                    signupViewModel.updateUserState(isStudent = true)
+
                 },
-                onAlumnusBtnClick = {},
+                onAlumnusBtnClick = {
+                    signupViewModel.updateUserState(isStudent = false)
+                    navController.navigate(
+                        AlumniConnectNavDestinations.Student.title
+                    )
+
+                },
+                navController = navController,
+                viewModel = signupViewModel
             )
         }
         composable(route = AlumniConnectNavDestinations.Student.title) {
@@ -42,14 +51,17 @@ fun NavGraphBuilder.signupGraph(
 
                 },
                 onDoneBtn = { signupViewModel.onDone(navController) },
-                onFrontBtnClick = { signupViewModel.onDone(navController, viaNextBtn = true) })
+                onFrontBtnClick = { signupViewModel.onDone(navController, viaNextBtn = true) },
+                viewModel = signupViewModel
+            )
         }
         composable(route = AlumniConnectNavDestinations.Credentials.title) {
             CredentialsScreen(
                 onBackBtnClick = {
                     navController.popBackStack()
                 },
-                navController = navController
+                navController = navController,
+                viewModel = signupViewModel
             )
         }
     }

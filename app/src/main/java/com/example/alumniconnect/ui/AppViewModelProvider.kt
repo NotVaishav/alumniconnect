@@ -17,7 +17,8 @@ object AppViewModelProvider {
         initializer {
             SignupViewModel(
                 alumniConnectApplication().container.usersRepository,
-                alumniConnectApplication().userStoreData
+                alumniConnectApplication().userStoreData,
+                alumniConnectApplication().container.domainRepository,
             )
         }
         initializer {

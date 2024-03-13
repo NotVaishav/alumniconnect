@@ -8,6 +8,9 @@ interface UsersRepository {
 
     fun getUserStream(id: Int): Flow<User?>
 
+    fun getUserByEmailStream(emailId: String): Flow<User?>
+
+
     suspend fun insertUser(user: User): Result<Unit>
 
     suspend fun deleteUser(user: User)
@@ -21,6 +24,9 @@ class OfflineUsersRepository(private val userDao: UserDao) : UsersRepository {
     override fun getAllUsersStream(): Flow<List<User>> = userDao.getAllItems()
 
     override fun getUserStream(id: Int): Flow<User?> = userDao.getItem(id)
+
+    override fun getUserByEmailStream(emailId: String): Flow<User?> =
+        userDao.getUserByEmail(emailId)
 
     override suspend fun insertUser(user: User): Result<Unit> {
         return try {

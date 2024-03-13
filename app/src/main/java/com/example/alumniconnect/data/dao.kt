@@ -24,6 +24,9 @@ interface UserDao {
 
     @Query("SELECT * from users ORDER BY id ASC")
     fun getAllItems(): Flow<List<User>>
+
+    @Query("SELECT * from users WHERE emailId = :emailId")
+    fun getUserByEmail(emailId: String): Flow<User>
 }
 
 @Dao

@@ -278,12 +278,6 @@ fun ProfileSection(modifier: Modifier = Modifier, fontColor: Color, userProfile:
     )
 }
 
-fun linkToWebpage(context: Context, url: String) {
-    val openURL = Intent(Intent.ACTION_VIEW)
-    openURL.data = Uri.parse(url)
-    startActivity(context, openURL, null)
-}
-
 fun Context.openUrlInBrowser(url: String) {
     val intent = Intent(Intent.ACTION_VIEW).apply {
         data = Uri.parse(url)
@@ -475,38 +469,41 @@ fun CoopExperienceSection(
                     modifier = modifier.size(40.dp)
                 )
             }
-            Log.d("USER EXPERIENCE", uiState.userExperience.toString())
-            for (each in uiState.userExperience.filter { it.isCoop }) {
+            if (uiState.userExperience.none { it.isCoop }) {
+                Text(text = "No experience added!", modifier = modifier.padding(start = 20.dp))
+            } else {
+                for (each in uiState.userExperience.filter { it.isCoop }) {
 
-                Column(
-                    modifier = modifier
-                        .padding(start = 15.dp),
-                ) {
-                    Text(
-                        text = each.role,
-                        fontWeight = FontWeight.Medium,
-                        modifier = modifier.padding(bottom = 2.dp)
-                    )
-                    Text(
-                        text = each.company,
-                        fontSize = 12.sp
-                    )
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = modifier.fillMaxWidth()
+                    Column(
+                        modifier = modifier
+                            .padding(start = 15.dp),
                     ) {
                         Text(
-                            text = "${each.startDate} - ${each.endDate}",
-                            fontSize = 10.sp,
-                            color = fontColor,
-                            modifier = modifier.padding(vertical = 1.dp)
+                            text = each.role,
+                            fontWeight = FontWeight.Medium,
+                            modifier = modifier.padding(bottom = 2.dp)
                         )
                         Text(
-                            text = "View insights",
-                            fontSize = 10.sp,
-                            modifier = modifier.padding(vertical = 1.dp),
-                            textDecoration = TextDecoration.Underline
+                            text = each.company,
+                            fontSize = 12.sp
                         )
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            modifier = modifier.fillMaxWidth()
+                        ) {
+                            Text(
+                                text = "${each.startDate} - ${each.endDate}",
+                                fontSize = 10.sp,
+                                color = fontColor,
+                                modifier = modifier.padding(vertical = 1.dp)
+                            )
+                            Text(
+                                text = "View insights",
+                                fontSize = 10.sp,
+                                modifier = modifier.padding(vertical = 1.dp),
+                                textDecoration = TextDecoration.Underline
+                            )
+                        }
                     }
                 }
             }
@@ -532,7 +529,8 @@ fun ExperienceSection(modifier: Modifier = Modifier, fontColor: Color, uiState: 
         )
         Row(
             modifier = modifier
-                .padding(vertical = 10.dp)
+                .padding(vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = modifier.size(50.dp),
@@ -544,30 +542,33 @@ fun ExperienceSection(modifier: Modifier = Modifier, fontColor: Color, uiState: 
                     modifier = modifier.size(40.dp)
                 )
             }
-            for (each in uiState.userExperience.filter { !it.isCoop }) {
-                Column(
-                    modifier = modifier
-                        .padding(start = 15.dp),
-                ) {
-                    Text(
-                        text = each.role,
-                        fontWeight = FontWeight.Medium,
-                        modifier = modifier.padding(bottom = 2.dp)
-                    )
-                    Text(
-                        text = each.company,
-                        fontSize = 12.sp
-                    )
-                    Text(
-                        text = "${each.startDate} - ${each.endDate}",
-                        fontSize = 10.sp,
-                        color = fontColor,
-                        modifier = modifier.padding(vertical = 1.dp)
-                    )
+            if (uiState.userExperience.none { it.isCoop }) {
+                Text(text = "No experience added!", modifier = modifier.padding(start = 20.dp))
+            } else {
+                for (each in uiState.userExperience.filter { !it.isCoop }) {
+                    Column(
+                        modifier = modifier
+                            .padding(start = 15.dp),
+                    ) {
+                        Text(
+                            text = each.role,
+                            fontWeight = FontWeight.Medium,
+                            modifier = modifier.padding(bottom = 2.dp)
+                        )
+                        Text(
+                            text = each.company,
+                            fontSize = 12.sp
+                        )
+                        Text(
+                            text = "${each.startDate} - ${each.endDate}",
+                            fontSize = 10.sp,
+                            color = fontColor,
+                            modifier = modifier.padding(vertical = 1.dp)
+                        )
+                    }
                 }
+
             }
-
-
         }
     }
 }
@@ -597,30 +598,32 @@ fun EducationSection(modifier: Modifier = Modifier, fontColor: Color, uiState: H
                 contentDescription = null,
                 modifier = modifier.size(50.dp)
             )
-            Log.d("THIS EDUCATION", uiState.userEducation.toString())
-            for (each in uiState.userEducation) {
-                Column(
-                    modifier = modifier
-                        .padding(start = 15.dp),
-                ) {
-                    Text(
-                        text = each.school,
-                        fontWeight = FontWeight.Medium,
-                        modifier = modifier.padding(bottom = 2.dp)
-                    )
-                    Text(
-                        text = each.degree,
-                        fontSize = 12.sp
-                    )
-                    Text(
-                        text = "${each.startDate} - ${each.endDate}",
-                        fontSize = 10.sp,
-                        color = fontColor,
-                        modifier = modifier.padding(vertical = 1.dp)
-                    )
+            if (uiState.userExperience.none { it.isCoop }) {
+                Text(text = "No education added!", modifier = modifier.padding(start = 20.dp))
+            } else {
+                for (each in uiState.userEducation) {
+                    Column(
+                        modifier = modifier
+                            .padding(start = 15.dp),
+                    ) {
+                        Text(
+                            text = each.school,
+                            fontWeight = FontWeight.Medium,
+                            modifier = modifier.padding(bottom = 2.dp)
+                        )
+                        Text(
+                            text = each.degree,
+                            fontSize = 12.sp
+                        )
+                        Text(
+                            text = "${each.startDate} - ${each.endDate}",
+                            fontSize = 10.sp,
+                            color = fontColor,
+                            modifier = modifier.padding(vertical = 1.dp)
+                        )
+                    }
                 }
             }
-
         }
     }
 }
