@@ -2,6 +2,7 @@ package com.example.alumniconnect.ui.common
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -20,6 +21,7 @@ fun WelcomeTopBar(
     isNextEnabled: Boolean = false,
     onFrontBtnClick: () -> Unit = {}
 ) {
+    Spacer(modifier = modifier.size(20.dp))
     Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = modifier.fillMaxWidth()) {
         IconButton(
             onClick = onBackBtnClick,

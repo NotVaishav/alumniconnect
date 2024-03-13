@@ -63,7 +63,9 @@ fun AlumniConnectNavGraph(
         }
         signupGraph(navController = navController, signupViewModel)
         composable(route = AlumniConnectNavDestinations.Login.title) {
-            LoginScreen()
+            LoginScreen(
+                navController = navController,
+                onBackBtnClick = { navController.popBackStack() })
         }
         homeGraph(navController = navController)
         profileGraph(navController = navController, profileViewModel)

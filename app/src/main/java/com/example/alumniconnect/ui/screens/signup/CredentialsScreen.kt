@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -100,20 +101,24 @@ fun CredentialsScreen(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             isPassword = true
         )
+        if (uiState.existingUserFound) {
+            Text(text = "User already exists!", color = Color.Red)
+        }
         Spacer(modifier = modifier.size(10.dp))
         PrimaryButton(
             onBtnClick = {
                 coroutineScope.launch {
                     viewModel.saveUser()
-                    navController.navigate(AlumniConnectNavDestinations.Welcome.title)
                 }
             },
             btnText = R.string.begin
         )
-        if (uiState.error == "success") {
-            Toast.makeText(context, "User inserted successfully", Toast.LENGTH_SHORT).show()
-        } else if (uiState.error.isNotBlank()) {
-            Toast.makeText(context, "Error: ${uiState.error}", Toast.LENGTH_SHORT).show()
+    }
+    LaunchedEffect(viewModel.uiState) {
+        viewModel.uiState.collect { uiState ->
+            if (uiState.areCredentialsValid) {
+                navController.navigate(AlumniConnectNavDestinations.Home.title)
+            }
         }
     }
 }

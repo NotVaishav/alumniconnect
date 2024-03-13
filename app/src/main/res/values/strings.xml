@@ -12,4 +12,5 @@
     <string name="view_cl">View CL</string>
     <string name="edit_resume">Upload New Resume</string>
     <string name="edit_cl">Upload New CL</string>
+    <string name="login">Login</string>
 </resources>

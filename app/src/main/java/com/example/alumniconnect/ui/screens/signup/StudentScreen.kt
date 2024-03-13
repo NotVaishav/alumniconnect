@@ -1,5 +1,6 @@
 package com.example.alumniconnect.ui.screens.signup
 
+import android.util.Log
 import android.widget.Space
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.scrollBy
@@ -25,6 +26,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
@@ -54,6 +56,8 @@ fun StudentSignupScreen(
     val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
     val localFocusManager = LocalFocusManager.current
+    val context = LocalContext.current
+    val textColor = context.getColor(R.color.text_grey)
     Column(
         modifier = modifier
             .padding(20.dp)
@@ -73,16 +77,27 @@ fun StudentSignupScreen(
             onFrontBtnClick = onFrontBtnClick
         )
         Spacer(modifier = modifier.size(40.dp))
-        Text(
-            text = "Howdy scholar!", style = MaterialTheme.typography.displayMedium,
-            modifier = modifier
-                .padding(bottom = 10.dp),
-            textAlign = TextAlign.Start
-        )
+        Log.d("SECOND", uiState.isStudent.toString())
+        if (uiState.isStudent) {
+            Text(
+                text = "Howdy scholar!", style = MaterialTheme.typography.displayMedium,
+                modifier = modifier
+                    .padding(bottom = 10.dp),
+                textAlign = TextAlign.Start
+            )
+        } else {
+            Text(
+                text = "Greetings alum!", style = MaterialTheme.typography.displayMedium,
+                modifier = modifier
+                    .padding(bottom = 10.dp),
+                textAlign = TextAlign.Start
+            )
+        }
+
         Text(
             text = "Let's get to know you",
             style = MaterialTheme.typography.labelLarge,
-            color = Color(R.color.text_grey),
+            color = Color(textColor),
         )
         Spacer(modifier = modifier.size(20.dp))
         PrimaryOutlinedTextField(
