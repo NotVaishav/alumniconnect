@@ -248,7 +248,7 @@ data class ProfileUIState(
             FieldItem(
                 fieldName = "Experiences",
                 hidden = false,
-                value = "${experienceItems.count()}+ experiences",
+                value = "1+ experiences",
                 icon = Icons.Filled.Info
             )
         ),
@@ -256,7 +256,7 @@ data class ProfileUIState(
             FieldItem(
                 fieldName = "Education",
                 hidden = false,
-                value = "${educationItems.count()}+ Education Details",
+                value = "1+ Education Details",
                 icon = Icons.Filled.Info
             )
         ),

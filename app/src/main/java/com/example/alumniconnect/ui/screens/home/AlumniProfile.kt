@@ -219,7 +219,8 @@ fun AlumniProfile(
                                         elevation = 10.dp,
                                         spotColor = Color.Black,
                                         shape = CircleShape
-                                    )
+                                    ),
+                                contentScale = ContentScale.Crop
                             )
                         }
                     }

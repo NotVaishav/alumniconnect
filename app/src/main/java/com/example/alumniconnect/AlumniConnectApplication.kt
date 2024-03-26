@@ -22,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlin.random.Random
+import kotlin.random.nextInt
 
 
 private const val IS_USER_LOGGED_IN_NAME = "isUserLoggedIn"
@@ -144,10 +145,17 @@ class RealisticUserGenerator {
             val about = generateDynamicAboutSection()
             val domainId = domainIds.random()
             val socialMediaId = "@${firstName.toLowerCase()}${lastName.toLowerCase()}"
-
+            val resumeLink =
+                "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/resume%2Fr${(1..20).random()}.pdf"
+            val coverLink =
+                "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/Cover%20Letter%2Fc${(1..20).random()}.pdf"
+            val profilePicLink =
+                "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/img%2Fimg${(2..10).random()}.jpg"
+            val bgPicLink =
+                "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/bg%2Fbg${(1..10).random()}.jpg"
             val user = User(
-                profilePic = "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/profile_pic.png",
-                backGroundPic = "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/profile_pic.png",
+                profilePic = profilePicLink,
+                backGroundPic = bgPicLink,
                 firstName = firstName,
                 lastName = lastName,
                 isStudent = true,
@@ -159,8 +167,8 @@ class RealisticUserGenerator {
                 about = about,
                 domainId = domainId,
                 isFeatured = true,
-                resume = "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/resume_template.pdf",
-                coverLetter = "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/cl_template.pdf",
+                resume = resumeLink,
+                coverLetter = coverLink,
                 instagramId = "$socialMediaId.instagram",
                 linkedInId = "$socialMediaId.linkedin",
                 facebookId = "$socialMediaId.facebook",
