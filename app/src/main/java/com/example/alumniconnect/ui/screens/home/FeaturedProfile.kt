@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -90,13 +91,14 @@ fun FeaturedProfile(
                                     elevation = 10.dp,
                                     spotColor = Color.Black,
                                     shape = RoundedCornerShape(10.dp)
-                                ),
+                                ).size(140.dp),
                         ) {
                             AsyncImage(
                                 model = item.profilePic,
 //                                painter = painterResource(id = item.profilePic),
                                 contentDescription = null,
-                                modifier = modifier.size(140.dp)
+                                modifier = modifier.size(140.dp),
+                                contentScale = ContentScale.Crop
                             )
                         }
                         Spacer(modifier = modifier.size(10.dp))
