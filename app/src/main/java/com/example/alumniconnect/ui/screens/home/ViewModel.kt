@@ -33,13 +33,16 @@ class HomeViewModel(
     }
 
     fun onSearchTextChange(text: String) {
-        val uiStateList = uiState.value.currentList
+        val uiStateList = uiState.value.mainList
         val alumniList = uiStateList.filter { user ->
             user.firstName?.contains(text, ignoreCase = true) ?: false
         }
+        Log.d("LISTCHECK", alumniList.toString())
+
         _uiState.update { currentState ->
             currentState.copy(searchText = text, currentList = alumniList)
         }
+        Log.d("CHECK", _uiState.value.searchText)
     }
 
     fun onToggleSearch() {
@@ -66,7 +69,9 @@ class HomeViewModel(
             usersRepository.getAllUsersStream().collect { userList ->
                 _uiState.update { currentState ->
                     currentState.copy(
-                        currentList = userList
+                        currentList = userList,
+                        mainList = userList
+
                     )
                 }
             }
@@ -130,6 +135,7 @@ data class HomeUiState(
     var currentDomain: String = "",
     var currentUserIndex: Int = 0,
     var currentList: List<User> = listOf(),
+    var mainList: List<User> = listOf(),
     var domainsList: List<com.example.alumniconnect.data.Domain> = listOf(),
     var userExperience: List<com.example.alumniconnect.data.ExperienceItem> = listOf(),
     var userEducation: List<com.example.alumniconnect.data.EducationItem> = listOf(
