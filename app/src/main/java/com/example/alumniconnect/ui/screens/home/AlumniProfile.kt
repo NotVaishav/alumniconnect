@@ -498,12 +498,12 @@ fun CoopExperienceSection(
                                 color = fontColor,
                                 modifier = modifier.padding(vertical = 1.dp)
                             )
-                            Text(
-                                text = "View insights",
-                                fontSize = 10.sp,
-                                modifier = modifier.padding(vertical = 1.dp),
-                                textDecoration = TextDecoration.Underline
-                            )
+//                            Text(
+//                                text = "View insights",
+//                                fontSize = 10.sp,
+//                                modifier = modifier.padding(vertical = 1.dp),
+//                                textDecoration = TextDecoration.Underline
+//                            )
                         }
                     }
                 }

@@ -1,5 +1,6 @@
 package com.example.alumniconnect.ui.screens.home
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -120,7 +121,7 @@ fun AppSearchBar(
     SearchBar(
         query = uiState.searchText,
         onQueryChange = { homeViewModel.onSearchTextChange(it) },
-        onSearch = {},
+        onSearch = { homeViewModel.onToggleSearch() },
         active = uiState.isSearching,
         onActiveChange = { homeViewModel.onToggleSearch() },
         placeholder = { Text(text = "Search ${domainName.lowercase()} alumni") },
@@ -147,6 +148,7 @@ fun AppSearchBar(
         ),
     ) {
         LazyColumn() {
+            Log.d("INCODE", uiState.currentList.toString())
             itemsIndexed(uiState.currentList.filter { it.domainId == domainId }) { index, item ->
                 val scope = rememberCoroutineScope()
                 AlumniTile(
