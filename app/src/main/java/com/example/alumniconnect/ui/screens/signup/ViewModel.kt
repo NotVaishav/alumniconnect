@@ -125,6 +125,7 @@ class SignupViewModel(
                             )
                         }
                     } else {
+                        saveUserLoggedInInformation()
                         val newUser = User(
                             profilePic = "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/no_image_profile.jpg",
                             backGroundPic = "https://pub-2fafbe9774c4496aadd392fe31e1ecef.r2.dev/background_drop.jpg",
@@ -157,7 +158,7 @@ class SignupViewModel(
                     }
                 }
             }
-            saveUserLoggedInInformation()
+
         }
 
     }
